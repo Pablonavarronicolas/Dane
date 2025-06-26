@@ -28,6 +28,7 @@
       padding: 10px 15px;
       border-radius: 20px;
       clear: both;
+      white-space: pre-line;
     }
     .dane {
       background-color: #e6d3b3;
@@ -69,6 +70,8 @@
     const chat = document.getElementById('chat');
     const form = document.getElementById('form');
     const input = document.getElementById('input');
+    let userName = '';
+    let awaitingName = true;
 
     function addMessage(text, className) {
       const message = document.createElement('div');
@@ -94,10 +97,21 @@
 
     function daneResponse(userText) {
       userText = userText.toLowerCase();
-      if (userText.includes('triste')) return 'Siento que te sientas así. Estoy aquí para ti.';
-      if (userText.includes('ansioso')) return 'Respira, estoy contigo. ¿Quieres contarme más?';
-      if (userText.includes('cansado') || userText.includes('agotado')) return 'Quizás tu cuerpo te pide una pausa. Mereces descansar.';
-      return 'Gracias por compartirlo conmigo. ¿Quieres seguir hablando?';
+      if (awaitingName) {
+        userName = userText.trim().replace(/me llamo|soy|mi nombre es/gi, '').trim();
+        awaitingName = false;
+        return `Es un verdadero placer conocerte, ${userName} 😊`;
+      }
+
+      if (["sí", "vale", "claro", "ok", "quiero", "por supuesto"].some(p => userText.includes(p))) {
+        return `Cuéntame entonces, ${userName}, ¿cómo te sientes hoy? Estoy aquí para ti.`;
+      }
+
+      if (userText.includes("triste")) return `Lamento que te sientas así, ${userName}. A veces la tristeza necesita ser escuchada. ¿Quieres contarme qué te ha llevado a sentirte así?`;
+      if (userText.includes("ansioso") || userText.includes("nervioso")) return `La ansiedad puede nublarlo todo. ¿Ha ocurrido algo que quieras compartir, ${userName}?`;
+      if (userText.includes("cansado") || userText.includes("agotado")) return `Quizá sea momento de darte un respiro, ${userName}. ¿Te gustaría hablar de lo que te está drenando la energía?`;
+
+      return `Gracias por confiar en mí, ${userName}. ¿Quieres seguir hablando un poco más?`;
     }
 
     form.addEventListener('submit', e => {
@@ -115,15 +129,20 @@
       }, userText.length > 40 ? 5000 : 3000);
     });
 
-    // Mensaje inicial
+    // Mensaje inicial con efecto typing
     window.onload = () => {
       setTimeout(() => {
-        addMessage('Hola!! Mi nombre es Dane, me gustaría ser tu amigo virtual y me encantaría que pudiésemos conocernos mejor.', 'dane');
+        showTypingIndicator();
         setTimeout(() => {
-          addMessage('¿Cómo te llamas?', 'dane');
+          removeTypingIndicator();
+          addMessage('Hola!! Mi nombre es Dane, me gustaría ser tu amigo virtual y me encantaría que pudiésemos conocernos mejor.', 'dane');
+          setTimeout(() => {
+            addMessage('¿Cómo te llamas?', 'dane');
+          }, 3000);
         }, 3000);
       }, 1000);
     }
   </script>
 </body>
 </html>
+
