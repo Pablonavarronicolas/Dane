@@ -5,83 +5,90 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dane - Tu espacio seguro</title>
   <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f0f2f5;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-    }
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
 
-    header {
-      background-color: #4a4e69;
-      color: white;
-      padding: 1rem;
-      text-align: center;
-      font-size: 1.2rem;
-    }
+  header {
+    background-color: #4A5568;
+    color: white;
+    padding: 1rem;
+    text-align: center;
+    font-size: 1.3rem;
+    font-weight: bold;
+  }
 
-    #chat-container {
-      flex: 1;
-      padding: 1rem;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-    }
+  #chat-container {
+    flex: 1;
+    padding: 1rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
 
-    .message {
-      max-width: 70%;
-      margin: 0.5rem;
-      padding: 0.8rem 1rem;
-      border-radius: 1rem;
-      line-height: 1.4;
-      word-wrap: break-word;
-    }
+  .message {
+    max-width: 80%;
+    padding: 0.8rem 1rem;
+    border-radius: 18px;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    word-wrap: break-word;
+  }
 
-    .user-message {
-      align-self: flex-end;
-      background-color: #dfe7fd;
-      color: #333;
-    }
+  .user-message {
+    align-self: flex-end;
+    background-color: #3182ce;
+    color: white;
+    border-bottom-right-radius: 0;
+  }
 
-    .bot-message {
-      align-self: flex-start;
-      background-color: #eaeaea;
-      color: #444;
-    }
+  .bot-message {
+    align-self: flex-start;
+    background-color: #e2e8f0;
+    color: #2d3748;
+    border-bottom-left-radius: 0;
+  }
 
-    form {
-      display: flex;
-      padding: 1rem;
-      border-top: 1px solid #ccc;
-      background-color: #fff;
-    }
+  form {
+    display: flex;
+    padding: 1rem;
+    background-color: white;
+    border-top: 1px solid #ccc;
+  }
 
-    input[type="text"] {
-      flex: 1;
-      padding: 0.8rem;
-      font-size: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 1rem;
-      margin-right: 0.5rem;
-    }
+  input[type="text"] {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    font-size: 1rem;
+    outline: none;
+  }
 
-    button {
-      padding: 0.8rem 1.2rem;
-      font-size: 1rem;
-      border: none;
-      background-color: #4a4e69;
-      color: white;
-      border-radius: 1rem;
-      cursor: pointer;
-    }
+  button {
+    margin-left: 10px;
+    padding: 0 1.5rem;
+    border: none;
+    background-color: #4A5568;
+    color: white;
+    border-radius: 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
 
-    button:hover {
-      background-color: #3b3e58;
-    }
-  </style>
+  button:hover {
+    background-color: #2d3748;
+  }
+</style>
 </head>
 <body>
   <header>Dane — Un lugar donde puedes hablar</header>
