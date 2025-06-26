@@ -2,91 +2,84 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Dane</title>
-  
   <style>
-  html, body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Arial', sans-serif;
-    height: 100vh;
-    overflow: hidden;
-  }
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      font-family: 'Arial', sans-serif;
+      background: url('danechat.jpg') no-repeat center center fixed;
+      background-size: cover;
+      overflow: hidden;
+    }
 
-  body {
-    background-image: url('danechat.jpg');
-    background-size: cover;
-    background-position: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-  }
+    #chat-container {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 20px;
+      padding-bottom: 80px;
+    }
 
-  #chat-container {
-    background-color: rgba(255, 255, 255, 0.85);
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
-    padding: 20px;
-    flex: 1;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-  }
+    .message {
+      max-width: 80%;
+      padding: 10px;
+      margin: 8px;
+      border-radius: 15px;
+      line-height: 1.5;
+      font-size: 1.1em;
+      word-wrap: break-word;
+      background-color: rgba(255, 255, 255, 0.7);
+    }
 
-  .message {
-    max-width: 80%;
-    padding: 10px;
-    margin: 8px;
-    border-radius: 15px;
-    line-height: 1.5;
-    font-size: 1.1em;
-    word-wrap: break-word;
-  }
+    .user {
+      align-self: flex-end;
+      background-color: #a0c4ff;
+    }
 
-  .user {
-    align-self: flex-end;
-    background-color: #a0c4ff;
-    color: #000;
-  }
+    .dane {
+      align-self: flex-start;
+      background-color: #f5e6ca;
+    }
 
-  .dane {
-    align-self: flex-start;
-    background-color: #f5e6ca;
-    color: #000;
-  }
+    #form {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      display: flex;
+      background-color: rgba(255, 255, 255, 0.95);
+      padding: 10px;
+      box-sizing: border-box;
+    }
 
-  #form {
-    display: flex;
-    padding: 10px;
-    background-color: #fff;
-  }
+    #user-input {
+      flex: 1;
+      padding: 10px;
+      font-size: 1em;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+    }
 
-  #user-input {
-    flex: 1;
-    padding: 10px;
-    font-size: 1em;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-  }
+    #send-btn {
+      margin-left: 10px;
+      padding: 10px 15px;
+      background-color: #7f5af0;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
 
-  #send-btn {
-    margin-left: 10px;
-    padding: 10px 15px;
-    background-color: #7f5af0;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-  }
-
-  #typing {
-    padding: 0 20px;
-    font-style: italic;
-    color: #444;
-  }
-</style>
-
+    #typing {
+      padding: 0 20px;
+      font-style: italic;
+      color: #444;
+    }
+  </style>
 </head>
 <body>
   <div id="chat-container"></div>
@@ -113,9 +106,7 @@
       try {
         const res = await fetch('https://e8a45e79-07f9-4fcb-a2f6-4cec1134c330-00-1dvokirgtjthj.spock.replit.dev/message', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ prompt: message })
         });
         const data = await res.json();
@@ -142,7 +133,7 @@
     // Primer mensaje automático con retardo y "..."
     window.onload = async () => {
       typingIndicator.textContent = '...';
-      await new Promise(resolve => setTimeout(resolve, 3000));
+      await new Promise(resolve => setTimeout(resolve, 2000));
       typingIndicator.textContent = '';
       addMessage('Hola!! Mi nombre es Dane, me gustaría ser tu amigo virtual y me encantaría que pudiésemos conocernos mejor.', 'dane');
       await new Promise(resolve => setTimeout(resolve, 3000));
@@ -150,7 +141,8 @@
       await new Promise(resolve => setTimeout(resolve, 2000));
       typingIndicator.textContent = '';
       addMessage('¿Cómo te llamas?', 'dane');
-    }
+    };
   </script>
 </body>
 </html>
+
