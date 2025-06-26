@@ -5,158 +5,134 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dane</title>
   <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      font-family: sans-serif;
-      height: 100%;
-      font-size: 17px;
-    }
     body {
-      background: url('danechat.jpg') no-repeat center center fixed;
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background-image: url('danechat.jpg');
       background-size: cover;
-      display: flex;
-      flex-direction: column;
-      min-height: 100dvh;
-    }
-    .chat-wrapper {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      overflow: hidden;
-    }
-    .chat-container {
-      flex: 1;
+      background-position: center;
+      height: 100vh;
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
+    }
+    #chat-container {
+      background-color: rgba(255, 255, 255, 0.85);
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
       padding: 20px;
+      max-height: 70vh;
       overflow-y: auto;
-      box-sizing: border-box;
     }
     .message {
-      max-width: 70%;
-      margin-bottom: 10px;
-      padding: 10px 15px;
-      border-radius: 20px;
-      clear: both;
-      white-space: pre-line;
-      font-size: 17px;
-    }
-    .dane {
-      background-color: #e6d3b3;
-      align-self: flex-start;
+      max-width: 80%;
+      padding: 10px;
+      margin: 8px;
+      border-radius: 15px;
+      line-height: 1.5;
+      font-size: 1.1em;
     }
     .user {
-      background-color: #c3d6df;
       align-self: flex-end;
+      background-color: #a0c4ff;
+      color: #000;
     }
-    .input-container {
+    .dane {
+      align-self: flex-start;
+      background-color: #f5e6ca;
+      color: #000;
+    }
+    #form {
       display: flex;
       padding: 10px;
-      background: rgba(255, 255, 255, 0.7);
-      box-sizing: border-box;
+      background-color: #fff;
     }
-    input {
+    #user-input {
       flex: 1;
       padding: 10px;
-      border-radius: 10px;
+      font-size: 1em;
       border: 1px solid #ccc;
-      font-size: 17px;
+      border-radius: 10px;
     }
-    button {
+    #send-btn {
       margin-left: 10px;
       padding: 10px 15px;
-      border: none;
-      background-color: #a2bfc5;
+      background-color: #7f5af0;
       color: white;
+      border: none;
       border-radius: 10px;
-      font-size: 17px;
+      cursor: pointer;
+    }
+    #typing {
+      padding: 0 20px;
+      font-style: italic;
+      color: #444;
     }
   </style>
 </head>
 <body>
-  <div class="chat-wrapper">
-    <div class="chat-container" id="chat"></div>
-    <form class="input-container" id="form">
-      <input type="text" id="input" placeholder="Escribe un mensaje..." autocomplete="off" />
-      <button type="submit">Enviar</button>
-    </form>
-  </div>
-
+  <div id="chat-container"></div>
+  <div id="typing"></div>
+  <form id="form">
+    <input id="user-input" type="text" placeholder="Escribe algo..." autocomplete="off" />
+    <button type="submit" id="send-btn">Enviar</button>
+  </form>
   <script>
-    const chat = document.getElementById('chat');
+    const chatContainer = document.getElementById('chat-container');
     const form = document.getElementById('form');
-    const input = document.getElementById('input');
-    let userName = '';
-    let expectingName = true;
+    const userInput = document.getElementById('user-input');
+    const typingIndicator = document.getElementById('typing');
 
-    function addMessage(text, className) {
-      const message = document.createElement('div');
-      message.className = `message ${className}`;
-      message.textContent = text;
-      chat.appendChild(message);
-      chat.scrollTop = chat.scrollHeight;
+    function addMessage(text, sender) {
+      const msg = document.createElement('div');
+      msg.className = `message ${sender}`;
+      msg.textContent = text;
+      chatContainer.appendChild(msg);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
     }
 
-    function showTypingIndicator() {
-      const typing = document.createElement('div');
-      typing.className = 'message dane';
-      typing.textContent = '...';
-      typing.id = 'typing';
-      chat.appendChild(typing);
-      chat.scrollTop = chat.scrollHeight;
-    }
-
-    function removeTypingIndicator() {
-      const typing = document.getElementById('typing');
-      if (typing) typing.remove();
-    }
-
-    async function fetchDaneResponse(message) {
+    async function sendMessageToServer(message) {
       try {
-        const response = await fetch("https://e8a45e79-07f9-4fcb-a2f6-4cec1134c330-00-1dvokirgtjthj.spock.replit.dev/message", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message })
+        const res = await fetch('https://TU-URL-REPLIT/message', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ prompt: message })
         });
-
-        const data = await response.json();
-        return data.reply;
-      } catch (error) {
-        return "Lo siento, algo ha fallado al intentar responderte.";
+        const data = await res.json();
+        return data.response;
+      } catch (err) {
+        console.error(err);
+        return 'Lo siento, hubo un error al conectar con el servidor.';
       }
     }
 
     form.addEventListener('submit', async e => {
       e.preventDefault();
-      const userText = input.value.trim();
-      if (!userText) return;
-      addMessage(userText, 'user');
-      input.value = '';
-      showTypingIndicator();
+      const text = userInput.value.trim();
+      if (!text) return;
+      addMessage(text, 'user');
+      userInput.value = '';
+      typingIndicator.textContent = '...';
 
-      const response = await fetchDaneResponse(userText);
-
-      setTimeout(() => {
-        removeTypingIndicator();
-        addMessage(response, 'dane');
-      }, response.length > 80 ? 5000 : 3000);
+      const reply = await sendMessageToServer(text);
+      typingIndicator.textContent = '';
+      addMessage(reply, 'dane');
     });
 
-    window.onload = () => {
-      setTimeout(() => {
-        showTypingIndicator();
-        setTimeout(() => {
-          removeTypingIndicator();
-          addMessage('Hola!! Mi nombre es Dane, me gustaría ser tu amigo virtual y me encantaría que pudiésemos conocernos mejor.', 'dane');
-          setTimeout(() => {
-            addMessage('¿Cómo te llamas?', 'dane');
-          }, 3000);
-        }, 3000);
-      }, 1000);
-    };
+    // Primer mensaje automático con retardo y "..."
+    window.onload = async () => {
+      typingIndicator.textContent = '...';
+      await new Promise(resolve => setTimeout(resolve, 3000));
+      typingIndicator.textContent = '';
+      addMessage('Hola!! Mi nombre es Dane, me gustaría ser tu amigo virtual y me encantaría que pudiésemos conocernos mejor.', 'dane');
+      await new Promise(resolve => setTimeout(resolve, 3000));
+      typingIndicator.textContent = '...';
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      typingIndicator.textContent = '';
+      addMessage('¿Cómo te llamas?', 'dane');
+    }
   </script>
 </body>
 </html>
