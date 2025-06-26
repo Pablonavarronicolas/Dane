@@ -12,19 +12,19 @@
     html, body {
       margin: 0;
       padding: 0;
-      height: 100%;
       font-family: 'Segoe UI', sans-serif;
       background: url('danechat.jpg') no-repeat center center fixed;
       background-size: cover;
+      background-attachment: fixed;
     }
 
     .chat-container {
       max-width: 600px;
-      height: 100vh;
       margin: 0 auto;
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
+      height: 100dvh; /* altura dinámica real */
       background-color: rgba(255, 255, 255, 0.2);
       backdrop-filter: blur(4px);
     }
@@ -63,7 +63,7 @@
     form {
       display: flex;
       padding: 16px;
-      background: rgba(255, 255, 255, 0.8);
+      background: rgba(255, 255, 255, 0.85);
       border-top: 1px solid #ccc;
     }
 
@@ -92,7 +92,7 @@
   </style>
 </head>
 <body>
-  <div class="chat-container">
+  <div class="chat-container" id="chatContainer">
     <div class="chat-box" id="chatBox">
       <div class="message dane">Hola! Soy Dane, y me alegro mucho de que estés aquí. ¿Cómo te llamas?</div>
     </div>
@@ -162,3 +162,4 @@
   </script>
 </body>
 </html>
+
