@@ -1,176 +1,208 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Dane - Chat Amigo</title>
-  <style>
-    body {
-      background-color: #fdf6e3; /* Beige muy claro */
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      /* Fondo tipo papel con textura sutil */
-      background-image:
-        repeating-linear-gradient(
-          to bottom,
-          #fdf6e3,
-          #fdf6e3 28px,
-          #e7d9b7 29px,
-          #fdf6e3 30px
-        ),
-        url('https://www.transparenttextures.com/patterns/paper-fibers.png');
-      background-repeat: repeat;
-      background-size: auto, 60px 60px;
-    }
-
-    #chat-container {
-      background: transparent; /* Deja que el fondo del body se vea */
-      width: 400px;
-      max-width: 90vw;
-      height: 600px;
-      display: flex;
-      flex-direction: column;
-      border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      padding: 15px;
-      box-sizing: border-box;
-      backdrop-filter: brightness(1.05);
-    }
-
-    #messages {
-      flex: 1;
-      overflow-y: auto;
-      padding-right: 10px;
-      margin-bottom: 10px;
-      scroll-behavior: smooth;
-    }
-
-    .message.user {
-      background-color: #f0e4c9; /* caqui claro */
-      color: #5a4a1b;
-      align-self: flex-end;
-      border-radius: 15px 15px 0 15px;
-      padding: 10px 15px;
-      margin: 5px 0;
-      max-width: 70%;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-      word-wrap: break-word;
-    }
-
-    .message.bot {
-      background-color: #cbbf9c; /* marrón claro */
-      color: #3e2f0b;
-      align-self: flex-start;
-      border-radius: 15px 15px 15px 0;
-      padding: 10px 15px;
-      margin: 5px 0;
-      max-width: 70%;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-      word-wrap: break-word;
-    }
-
-    form {
-      display: flex;
-      border-top: 1px solid #ccc;
-      padding-top: 10px;
-    }
-
-    input[type="text"] {
-      flex: 1;
-      padding: 10px;
-      border-radius: 20px;
-      border: 1px solid #ccc;
-      font-size: 16px;
-      outline: none;
-      margin-right: 10px;
-      background-color: #fdf6e3;
-      color: #3e2f0b;
-    }
-
-    input[type="text"]::placeholder {
-      color: #a89d7d;
-    }
-
-    button {
-      background-color: #cbbf9c;
-      border: none;
-      border-radius: 20px;
-      padding: 10px 20px;
-      color: #3e2f0b;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    button:hover {
-      background-color: #b0a97e;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Dane - Chat Amigo</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #fdf6e3 url('https://www.transparenttextures.com/patterns/pw-maze-white.png') repeat;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    color: #4b3b2b;
+  }
+  header {
+    background-color: #d6c6aa;
+    padding: 1rem;
+    text-align: center;
+    font-weight: 600;
+    font-size: 1.5rem;
+    color: #3b2e1e;
+    user-select: none;
+  }
+  main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    overflow-y: auto;
+    background: #f9f5eccc;
+  }
+  .chat-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .message {
+    max-width: 70%;
+    padding: 0.6rem 1rem;
+    border-radius: 1rem;
+    line-height: 1.3;
+    font-size: 1rem;
+    box-shadow: 0 0 4px rgb(0 0 0 / 0.1);
+  }
+  .dane {
+    align-self: flex-start;
+    background-color: #cdb490; /* marrón claro */
+    color: #3b2e1e;
+    border-bottom-left-radius: 0;
+  }
+  .user {
+    align-self: flex-end;
+    background-color: #d9c9a5; /* caqui claro */
+    color: #3b2e1e;
+    border-bottom-right-radius: 0;
+  }
+  form {
+    display: flex;
+    padding: 0.5rem 1rem;
+    background-color: #d6c6aa;
+    border-top: 1px solid #b4a77b;
+  }
+  input[type="text"] {
+    flex: 1;
+    padding: 0.7rem 1rem;
+    border-radius: 2rem;
+    border: none;
+    font-size: 1rem;
+    outline: none;
+    box-shadow: inset 0 0 5px #b4a77b;
+  }
+  button {
+    margin-left: 0.7rem;
+    background-color: #a88a4a;
+    border: none;
+    color: #fff;
+    padding: 0 1rem;
+    font-weight: 600;
+    border-radius: 2rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  button:hover {
+    background-color: #8b7030;
+  }
+</style>
 </head>
 <body>
-  <div id="chat-container">
-    <div id="messages"></div>
-    <form id="chat-form">
-      <input type="text" id="user-input" placeholder="Escribe tu mensaje aquí..." autocomplete="off" />
-      <button type="submit">Enviar</button>
-    </form>
+
+<header>Dane - Tu amigo para charlar</header>
+
+<main>
+  <div class="chat-container" id="chat">
+    <!-- Mensajes se insertan aquí -->
   </div>
+</main>
 
-  <script>
-    const messagesDiv = document.getElementById('messages');
-    const form = document.getElementById('chat-form');
-    const userInput = document.getElementById('user-input');
+<form id="chat-form">
+  <input type="text" id="user-input" autocomplete="off" placeholder="Escribe aquí..." />
+  <button type="submit">Enviar</button>
+</form>
 
-    let userName = null;
-    let awaitingName = true;
+<script>
+  const chat = document.getElementById('chat');
+  const form = document.getElementById('chat-form');
+  const userInput = document.getElementById('user-input');
 
-    function addMessage(text, sender) {
-      const messageDiv = document.createElement('div');
-      messageDiv.classList.add('message', sender);
-      messageDiv.textContent = text;
-      messagesDiv.appendChild(messageDiv);
-      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  let userName = null;
+  let awaitingName = true;
+  let confirmingName = false;
+
+  function capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
+  function extractName(text) {
+    text = text.toLowerCase();
+
+    const patterns = [
+      /me llamo ([a-záéíóúüñ\s]+)/i,
+      /soy ([a-záéíóúüñ\s]+)/i,
+      /mi nombre es ([a-záéíóúüñ\s]+)/i,
+      /llámame ([a-záéíóúüñ\s]+)/i
+    ];
+
+    for (const pattern of patterns) {
+      const match = text.match(pattern);
+      if (match && match[1]) {
+        return capitalize(match[1].trim().split(' ')[0]); // solo la primera palabra como nombre
+      }
     }
 
-    function getResponse(userText) {
-      userText = userText.toLowerCase();
+    return null;
+  }
 
-      if (awaitingName) {
-        userName = userText.trim();
+  function addMessage(text, sender) {
+    const msg = document.createElement('div');
+    msg.classList.add('message', sender);
+    msg.textContent = text;
+    chat.appendChild(msg);
+    chat.scrollTop = chat.scrollHeight;
+  }
+
+  function getResponse(userText) {
+    if (awaitingName) {
+      const possibleName = extractName(userText);
+      if (possibleName) {
+        userName = possibleName;
         awaitingName = false;
-        return `Estoy encantado de conocerte, ${userName}. ¿Cómo te sientes hoy?`;
+        return `¡Encantado de conocerte, ${userName}! ¿Cómo te sientes hoy?`;
+      } else {
+        confirmingName = true;
+        return `No estoy seguro de tu nombre. ¿Me lo puedes decir?`;
       }
-
-      if(userText.includes("triste") || userText.includes("deprimido")) {
-        return `${userName}, siento que te sientas así. Estoy aquí para escucharte, no estás solo.`;
-      }
-      if(userText.includes("ansioso") || userText.includes("nervioso")) {
-        return `${userName}, la ansiedad puede ser dura. Respira profundo, ¿quieres contarme qué te preocupa?`;
-      }
-      if(userText.includes("cansado") || userText.includes("agotado")) {
-        return `${userName}, es normal sentirse agotado. Date permiso para descansar un poco, aquí estoy.`;
-      }
-
-      return `Gracias por compartir conmigo, ${userName}. ¿Quieres seguir hablando?`;
     }
 
-    addMessage("Hola! Soy Dane, y me alegro mucho de que estés aquí. Si me lo permites, me gustaría ser un amigo con el que puedas charlar, sin juicios ni tratos, únicamente escucharte y compartir, para aliviar tus pensamientos. ¿Quieres presentarte?", 'bot');
+    if (confirmingName) {
+      userName = capitalize(userText.trim().split(' ')[0]);
+      confirmingName = false;
+      awaitingName = false;
+      return `¡Gracias, ${userName}! ¿Cómo te sientes hoy?`;
+    }
 
-    form.addEventListener('submit', e => {
-      e.preventDefault();
-      const userText = userInput.value.trim();
-      if (!userText) return;
-      addMessage(userText, 'user');
-      const response = getResponse(userText);
-      addMessage(response, 'bot');
-      userInput.value = '';
-    });
-  </script>
+    // Aquí respuestas básicas para emociones
+    const text = userText.toLowerCase();
+
+    if(text.includes("triste") || text.includes("deprimido")) {
+      return `${userName}, siento que te sientas así. Estoy aquí para escucharte, no estás solo.`;
+    }
+    if(text.includes("ansioso") || text.includes("nervioso")) {
+      return `${userName}, la ansiedad puede ser dura. Respira profundo, ¿quieres contarme qué te preocupa?`;
+    }
+    if(text.includes("cansado") || text.includes("agotado")) {
+      return `${userName}, es normal sentirse agotado. Date permiso para descansar un poco, aquí estoy.`;
+    }
+    if(text.includes("vacío") || text.includes("solo")) {
+      return `${userName}, a veces el vacío duele, pero compartirlo ya es un gran paso. Cuéntame más si quieres.`;
+    }
+    if(text.includes("bloqueado") || text.includes("inseguro")) {
+      return `${userName}, todos pasamos por momentos así. No te presiones demasiado, estoy contigo.`;
+    }
+
+    return `Gracias por contarme, ${userName}. ¿Quieres seguir hablando?`;
+  }
+
+  // Mensaje inicial para que el usuario sepa que debe presentarse
+  addMessage("¡Hola! Soy Dane, tu amigo para charlar sin juicios. ¿Cómo te llamas?", "dane");
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const text = userInput.value.trim();
+    if(!text) return;
+
+    addMessage(text, 'user');
+    userInput.value = '';
+
+    setTimeout(() => {
+      const response = getResponse(text);
+      addMessage(response, 'dane');
+    }, 400); // pequeño delay para simular respuesta natural
+  });
+</script>
+
 </body>
 </html>
-
