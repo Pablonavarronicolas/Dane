@@ -6,24 +6,28 @@
   <title>Dane</title>
   <style>
     html, body {
-      margin: 0;
-      padding: 0;
-      height: 100vh;
-      font-family: 'Arial', sans-serif;
-      background: url('danechat.jpg') no-repeat center center fixed;
-      background-size: cover;
-      overflow: hidden;
-    }
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  font-family: 'Arial', sans-serif;
+  background: url('danechat.jpg') no-repeat center center fixed;
+  background-size: cover;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
 
-    #chat-container {
-      flex: 1;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding: 20px;
-      padding-bottom: 80px;
-    }
+
+   #chat-container {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 20px;
+  margin-bottom: 60px;
+}
+
 
     .message {
       max-width: 80%;
