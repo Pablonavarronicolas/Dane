@@ -60,6 +60,29 @@
     <button onclick="window.location.href='#'">Comenzar</button>
   </div>
 </body>
+  <script>
+  const form = document.getElementById('chat-form');
+  const responseDiv = document.getElementById('response');
+
+  form.addEventListener('submit', function(event) {
+    event.preventDefault(); // Evita que la página se recargue
+
+    const userText = document.getElementById('userInput').value.trim();
+
+    if (userText === '') {
+      responseDiv.textContent = 'Por favor, escribe algo para que Dane te responda.';
+      return;
+    }
+
+    // Aquí podemos poner la respuesta fija de Dane por ahora
+    const daneResponse = `Gracias por compartir, me has dicho: "${userText}". Estoy aquí para escucharte, amigo.`;
+
+    responseDiv.textContent = daneResponse;
+
+    form.reset(); // Limpia el texto del formulario
+  });
+</script>
+
 </html>
 <form id="chat-form">
   <label for="userInput">¿Cómo te sientes hoy?</label><br>
