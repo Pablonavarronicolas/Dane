@@ -2,94 +2,77 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dane - Tu diario emocional</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dane - Chat de Apoyo</title>
   <style>
     body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f4f4f4;
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 0 20px;
+      background-color: #f9f9f9;
       color: #333;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
     }
-
-    .container {
-      background-color: white;
-      padding: 2rem;
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      max-width: 500px;
-      width: 90%;
-      text-align: center;
-    }
-
     h1 {
-      margin-bottom: 0.5rem;
-      font-size: 2rem;
+      text-align: center;
+      color: #4a90e2;
     }
-
-    p {
-      font-size: 1.1rem;
-      margin-bottom: 1.5rem;
+    form {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
     }
-
+    input[type="text"] {
+      flex-grow: 1;
+      padding: 10px;
+      font-size: 16px;
+    }
     button {
-      padding: 0.8rem 1.5rem;
-      font-size: 1rem;
-      background-color: #3d5a80;
+      background-color: #4a90e2;
       color: white;
       border: none;
-      border-radius: 8px;
+      padding: 0 20px;
+      font-size: 16px;
       cursor: pointer;
-      transition: background-color 0.3s ease;
     }
-
     button:hover {
-      background-color: #2b3f59;
+      background-color: #357abd;
+    }
+    #response {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+      font-style: italic;
+      color: #444;
+      min-height: 60px;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Hola, soy Dane</h1>
-    <p>Estoy aquí para escucharte. Un espacio tranquilo, sin juicios. ¿Quieres hablar?</p>
-    <button onclick="window.location.href='#'">Comenzar</button>
-  </div>
-</body>
+  <h1>Hola, soy Dane</h1>
+  <form id="chat-form">
+    <input type="text" id="user-input" placeholder="Escribe lo que sientes..." required />
+    <button type="submit">Hablar con Dane</button>
+  </form>
+  <div id="response"></div>
+
   <script>
-  const form = document.getElementById('chat-form');
-  const responseDiv = document.getElementById('response');
+    document.getElementById('chat-form').addEventListener('submit', function(e) {
+      e.preventDefault();
 
-  form.addEventListener('submit', function(event) {
-    event.preventDefault(); // Evita que la página se recargue
+      const input = document.getElementById('user-input').value.trim();
+      const responseDiv = document.getElementById('response');
 
-    const userText = document.getElementById('userInput').value.trim();
+      if (input === '') {
+        responseDiv.textContent = 'Por favor, escribe algo para que Dane pueda responder.';
+        return;
+      }
 
-    if (userText === '') {
-      responseDiv.textContent = 'Por favor, escribe algo para que Dane te responda.';
-      return;
-    }
-
-    // Aquí podemos poner la respuesta fija de Dane por ahora
-    const daneResponse = `Gracias por compartir, me has dicho: "${userText}". Estoy aquí para escucharte, amigo.`;
-
-    responseDiv.textContent = daneResponse;
-
-    form.reset(); // Limpia el texto del formulario
-  });
-</script>
-
+      responseDiv.textContent = `Hola, gracias por compartir: "${input}". Estoy aquí para escucharte y acompañarte.`;
+      document.getElementById('user-input').value = '';
+    });
+  </script>
+</body>
 </html>
-<form id="chat-form">
-  <div id="response" style="margin-top: 20px; font-style: italic; color: #444;"></div>
 
-  <label for="userInput">¿Cómo te sientes hoy?</label><br>
-  <textarea id="userInput" name="userInput" rows="4" cols="50" placeholder="Escríbeme lo que quieras..."></textarea><br>
-  <button type="submit">Hablar con Dane</button>
-</form>
-
-<div id="response"></div>
