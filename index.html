@@ -5,94 +5,99 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Dane</title>
   <style>
-   html, body {
-  margin: 0;
-  padding: 0;
-  height: 100vh;
-  font-family: 'Arial', sans-serif;
-  background: url('danechat.jpg') no-repeat center center fixed;
-  background-size: cover;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Arial', sans-serif;
+      background: url('danechat.jpg') no-repeat center center fixed;
+      background-size: cover;
+    }
 
-#chat-container {
-  flex: 1;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: 20px;
-  padding-bottom: 80px; /* deja espacio para el input */
-}
+    body {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
 
-.message {
-  max-width: 80%;
-  padding: 10px;
-  margin: 8px;
-  border-radius: 15px;
-  line-height: 1.5;
-  font-size: 1.1em;
-  word-wrap: break-word;
-  background-color: rgba(255, 255, 255, 0.7);
-}
+    #chat-wrapper {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 20px;
+      padding-bottom: 100px;
+      box-sizing: border-box;
+    }
 
-.user {
-  align-self: flex-end;
-  background-color: #a0c4ff;
-}
+    .message {
+      max-width: 80%;
+      padding: 10px;
+      margin: 8px;
+      border-radius: 15px;
+      line-height: 1.5;
+      font-size: 1.15em;
+      word-wrap: break-word;
+      background-color: rgba(255, 255, 255, 0.7);
+    }
 
-.dane {
-  align-self: flex-start;
-  background-color: #f5e6ca;
-}
+    .user {
+      align-self: flex-end;
+      background-color: #a0c4ff;
+    }
 
-#form {
-  position: relative;
-  bottom: 0;
-  width: 100%;
-  display: flex;
-  background-color: rgba(255, 255, 255, 0.95);
-  padding: 10px;
-  box-sizing: border-box;
-}
+    .dane {
+      align-self: flex-start;
+      background-color: #f5e6ca;
+    }
 
-#user-input {
-  flex: 1;
-  padding: 10px;
-  font-size: 1em;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-}
+    #form {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      display: flex;
+      background-color: rgba(255, 255, 255, 0.95);
+      padding: 10px;
+      box-sizing: border-box;
+    }
 
-#send-btn {
-  margin-left: 10px;
-  padding: 10px 15px;
-  background-color: #7f5af0;
-  color: white;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-}
+    #user-input {
+      flex: 1;
+      padding: 10px;
+      font-size: 1.1em;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+    }
 
-#typing {
-  padding: 0 20px;
-  font-style: italic;
-  color: #444;
-}
+    #send-btn {
+      margin-left: 10px;
+      padding: 10px 15px;
+      background-color: #7f5af0;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
 
+    #typing {
+      padding: 5px 20px;
+      font-style: italic;
+      color: #444;
+      height: 20px;
+    }
   </style>
 </head>
 <body>
-  <div id="chat-container"></div>
+  <div id="chat-wrapper"></div>
   <div id="typing"></div>
   <form id="form">
     <input id="user-input" type="text" placeholder="Escribe algo..." autocomplete="off" />
     <button type="submit" id="send-btn">Enviar</button>
   </form>
+
   <script>
-    const chatContainer = document.getElementById('chat-container');
+    const chatContainer = document.getElementById('chat-wrapper');
     const form = document.getElementById('form');
     const userInput = document.getElementById('user-input');
     const typingIndicator = document.getElementById('typing');
@@ -133,7 +138,7 @@
       addMessage(reply, 'dane');
     });
 
-    // Primer mensaje automático con retardo y "..."
+    // Primer mensaje automático
     window.onload = async () => {
       typingIndicator.textContent = '...';
       await new Promise(resolve => setTimeout(resolve, 2000));
