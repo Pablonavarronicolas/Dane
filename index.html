@@ -173,6 +173,22 @@
   </form>
 
   <script>
+    // Ajustar la altura del contenedor de chat dinámicamente
+    function adjustChatHeight() {
+      const chatContainer = document.getElementById('chat-container');
+      const form = document.getElementById('form');
+      const header = document.getElementById('chat-header');
+      const totalHeight = window.innerHeight;
+      const headerHeight = header.offsetHeight;
+      const formHeight = form.offsetHeight;
+      
+      // Ajustamos la altura del contenedor del chat
+      chatContainer.style.height = `${totalHeight - headerHeight - formHeight}px`;
+    }
+
+    window.addEventListener('resize', adjustChatHeight);
+    window.onload = adjustChatHeight;
+
     const chatContainer = document.getElementById('chat-container');
     const form = document.getElementById('form');
     const userInput = document.getElementById('user-input');
