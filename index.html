@@ -56,6 +56,7 @@
       color: #666;
     }
 
+    /* Contenedor del chat que debe ser desplazable */
     #chat-container {
       flex: 1;
       overflow-y: auto;
@@ -63,9 +64,9 @@
       flex-direction: column;
       justify-content: flex-end;
       padding: 20px;
-      margin-top: 80px; /* Espacio para la barra fija */
+      padding-top: 80px; /* Espacio para la barra fija */
       box-sizing: border-box;
-      height: calc(100vh - 160px); /* Ajuste dinámico para que no se solape con la caja de entrada */
+      margin-bottom: 60px; /* Espacio para la caja de entrada */
     }
 
     .message {
@@ -89,6 +90,7 @@
       background-color: #f5e6ca;
     }
 
+    /* Caja de escritura fija en la parte inferior */
     #form {
       position: fixed;
       bottom: 0;
@@ -173,22 +175,6 @@
   </form>
 
   <script>
-    // Ajustar la altura del contenedor de chat dinámicamente
-    function adjustChatHeight() {
-      const chatContainer = document.getElementById('chat-container');
-      const form = document.getElementById('form');
-      const header = document.getElementById('chat-header');
-      const totalHeight = window.innerHeight;
-      const headerHeight = header.offsetHeight;
-      const formHeight = form.offsetHeight;
-      
-      // Ajustamos la altura del contenedor del chat
-      chatContainer.style.height = `${totalHeight - headerHeight - formHeight}px`;
-    }
-
-    window.addEventListener('resize', adjustChatHeight);
-    window.onload = adjustChatHeight;
-
     const chatContainer = document.getElementById('chat-container');
     const form = document.getElementById('form');
     const userInput = document.getElementById('user-input');
@@ -253,3 +239,4 @@
   </script>
 </body>
 </html>
+
