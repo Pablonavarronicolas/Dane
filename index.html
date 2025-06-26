@@ -103,13 +103,12 @@
 console.log(getResponse("Me siento triste hoy"));
 
     form.addEventListener('submit', e => {
-      e.preventDefault();
-      const userText = userInput.value.trim();
-      if (!userText) return;
-      // Aquí iría la lógica para generar la respuesta de Dane
-      responseDiv.textContent = 'Dane dice: ' + userText; // ejemplo temporal
-      userInput.value = '';
-    });
+  e.preventDefault();
+  const userText = userInput.value.trim();
+  if (!userText) return;
+  responseDiv.textContent = 'Dane dice: ' + getResponse(userText);
+  userInput.value = '';
+});
   </script>
 </body>
 </html>
