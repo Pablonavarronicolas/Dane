@@ -82,9 +82,25 @@
   </div>
 
   <script>
-    const form = document.getElementById('chatForm');
-    const userInput = document.getElementById('userInput');
-    const responseDiv = document.getElementById('response');
+    function getResponse(userText) {
+  userText = userText.toLowerCase();
+
+  if(userText.includes("triste") || userText.includes("deprimido")) {
+    return "Siento que te sientas así. Estoy aquí para escucharte, no estás solo.";
+  }
+  if(userText.includes("ansioso") || userText.includes("nervioso")) {
+    return "La ansiedad puede ser dura. Respira profundo, ¿quieres contarme qué te preocupa?";
+  }
+  if(userText.includes("cansado") || userText.includes("agotado")) {
+    return "Es normal sentirse agotado. Date permiso para descansar un poco, aquí estoy.";
+  }
+  
+  // Respuesta por defecto
+  return "Gracias por compartir conmigo. ¿Quieres seguir hablando?";
+}
+
+// Aquí puedes ver un ejemplo de cómo usarlo:
+console.log(getResponse("Me siento triste hoy"));
 
     form.addEventListener('submit', e => {
       e.preventDefault();
