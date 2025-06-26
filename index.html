@@ -3,76 +3,97 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Dane - Chat de Apoyo</title>
+  <title>Dane - Tu amigo para charlar</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f5f5f5;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
       max-width: 600px;
       margin: 40px auto;
-      padding: 0 20px;
-      background-color: #f9f9f9;
-      color: #333;
+      background: white;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
     h1 {
-      text-align: center;
-      color: #4a90e2;
+      font-weight: 600;
+      font-size: 28px;
+      color: #4a4a4a;
+      margin-bottom: 15px;
+    }
+    p.description {
+      font-style: italic;
+      color: #666;
+      margin-bottom: 30px;
     }
     form {
       display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
+      flex-direction: column;
     }
-    input[type="text"] {
-      flex-grow: 1;
-      padding: 10px;
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+      padding: 12px;
       font-size: 16px;
+      border: 1.5px solid #ccc;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-family: inherit;
+      color: #333;
     }
     button {
       background-color: #4a90e2;
       color: white;
       border: none;
-      padding: 0 20px;
-      font-size: 16px;
+      padding: 14px;
+      font-size: 17px;
+      border-radius: 8px;
       cursor: pointer;
+      transition: background-color 0.3s ease;
     }
     button:hover {
       background-color: #357abd;
     }
     #response {
-      background: white;
-      padding: 15px;
-      border-radius: 8px;
-      box-shadow: 0 0 8px rgba(0,0,0,0.1);
-      font-style: italic;
+      margin-top: 25px;
+      font-size: 18px;
+      line-height: 1.4;
       color: #444;
-      min-height: 60px;
+      white-space: pre-line;
     }
   </style>
 </head>
 <body>
-  <h1>Hola, soy Dane</h1>
-  <form id="chat-form">
-    <input type="text" id="user-input" placeholder="Escribe lo que sientes..." required />
-    <button type="submit">Hablar con Dane</button>
-  </form>
-  <div id="response"></div>
+  <div class="container">
+    <h1>Hola, soy Dane</h1>
+    <p class="description">Me alegra que estés aquí. Soy un amigo con quien puedes charlar sin juicios ni prisa, solo escucharte y compartir para aliviar tus pensamientos.</p>
+
+    <form id="chatForm">
+      <textarea id="userInput" placeholder="¿Cómo te sientes hoy?" required></textarea>
+      <button type="submit">Enviar</button>
+    </form>
+
+    <div id="response"></div>
+  </div>
 
   <script>
-    document.getElementById('chat-form').addEventListener('submit', function(e) {
+    const form = document.getElementById('chatForm');
+    const userInput = document.getElementById('userInput');
+    const responseDiv = document.getElementById('response');
+
+    form.addEventListener('submit', e => {
       e.preventDefault();
-
-      const input = document.getElementById('user-input').value.trim();
-      const responseDiv = document.getElementById('response');
-
-      if (input === '') {
-        responseDiv.textContent = 'Por favor, escribe algo para que Dane pueda responder.';
-        return;
-      }
-
-      responseDiv.textContent = `Hola, gracias por compartir: "${input}". Estoy aquí para escucharte y acompañarte.`;
-      document.getElementById('user-input').value = '';
+      const userText = userInput.value.trim();
+      if (!userText) return;
+      // Aquí iría la lógica para generar la respuesta de Dane
+      responseDiv.textContent = 'Dane dice: ' + userText; // ejemplo temporal
+      userInput.value = '';
     });
   </script>
 </body>
 </html>
-
