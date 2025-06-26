@@ -2,164 +2,131 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Dane - Tu compañero</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dane - Tu compañero emocional</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    html, body {
+    body {
       margin: 0;
       padding: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: url('danechat.jpg') no-repeat center center fixed;
+      font-family: "Segoe UI", sans-serif;
+      background-image: url('danechat.jpg');
       background-size: cover;
-      background-attachment: fixed;
+      background-position: center;
+      background-repeat: no-repeat;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
     }
 
     .chat-container {
-      max-width: 600px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      height: 100dvh; /* altura dinámica real */
-      background-color: rgba(255, 255, 255, 0.2);
-      backdrop-filter: blur(4px);
-    }
-
-    .chat-box {
       flex: 1;
-      padding: 20px;
       overflow-y: auto;
+      padding: 20px;
       display: flex;
       flex-direction: column;
       gap: 10px;
+      backdrop-filter: blur(6px);
     }
 
     .message {
       max-width: 70%;
-      padding: 12px 16px;
-      border-radius: 20px;
-      word-wrap: break-word;
+      padding: 10px 15px;
+      border-radius: 15px;
+      font-size: 16px;
       line-height: 1.4;
+      white-space: pre-wrap;
     }
 
     .user {
       align-self: flex-end;
-      background-color: #cce4f6;
-      color: #333;
+      background-color: #b9d3e0;
+      color: #000;
       border-bottom-right-radius: 0;
     }
 
-    .dane {
+    .bot {
       align-self: flex-start;
-      background-color: #f5e6d3;
-      color: #333;
+      background-color: #f2e6d9;
+      color: #000;
       border-bottom-left-radius: 0;
     }
 
     form {
       display: flex;
-      padding: 16px;
-      background: rgba(255, 255, 255, 0.85);
+      padding: 10px;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(6px);
       border-top: 1px solid #ccc;
     }
 
     input {
       flex: 1;
       padding: 10px;
-      border: none;
-      border-radius: 20px;
       font-size: 16px;
-      margin-right: 10px;
+      border: none;
+      border-radius: 10px;
+      outline: none;
     }
 
     button {
-      padding: 10px 20px;
+      padding: 10px 15px;
+      margin-left: 10px;
+      font-size: 16px;
       border: none;
-      border-radius: 20px;
-      background-color: #6fa8dc;
+      background-color: #6c9db4;
       color: white;
-      font-weight: bold;
+      border-radius: 10px;
       cursor: pointer;
     }
 
     button:hover {
-      background-color: #5891c0;
+      background-color: #5a89a1;
     }
   </style>
 </head>
 <body>
-  <div class="chat-container" id="chatContainer">
-    <div class="chat-box" id="chatBox">
-      <div class="message dane">Hola! Soy Dane, y me alegro mucho de que estés aquí. ¿Cómo te llamas?</div>
-    </div>
-    <form id="chatForm">
-      <input type="text" id="userInput" autocomplete="off" placeholder="Escribe aquí..." />
-      <button type="submit">Enviar</button>
-    </form>
-  </div>
+  <div class="chat-container" id="chat"></div>
+  <form id="chat-form">
+    <input type="text" id="user-input" placeholder="Escribe aquí..." autocomplete="off" />
+    <button type="submit">Enviar</button>
+  </form>
 
   <script>
-    const chatBox = document.getElementById('chatBox');
-    const form = document.getElementById('chatForm');
-    const userInput = document.getElementById('userInput');
+    const form = document.getElementById('chat-form');
+    const userInput = document.getElementById('user-input');
+    const chat = document.getElementById('chat');
 
-    let userName = null;
-
-    function addMessage(text, sender) {
-      const messageDiv = document.createElement('div');
-      messageDiv.classList.add('message', sender);
-      messageDiv.textContent = text;
-      chatBox.appendChild(messageDiv);
-      chatBox.scrollTop = chatBox.scrollHeight;
-    }
-
-    function getResponse(text) {
-      const lower = text.toLowerCase();
-
-      if (!userName) {
-        const match = text.match(/(?:me llamo|soy|mi nombre es)\s+([a-záéíóúñ]+)/i);
-        userName = match ? match[1] : text.trim();
-        return `Encantado de conocerte, ${userName}. ¿Cómo te estás sintiendo hoy?`;
-      }
-
-      if (lower.includes("triste") || lower.includes("deprimido")) {
-        return `Siento que te sientas así, ${userName}. Estoy aquí para ti, sin prisa. ¿Quieres contarme más?`;
-      }
-
-      if (lower.includes("ansioso") || lower.includes("ansiedad") || lower.includes("nervioso")) {
-        return `La ansiedad puede ser dura, ${userName}. Estoy contigo. ¿Qué sientes en este momento?`;
-      }
-
-      if (lower.includes("cansado") || lower.includes("agotado")) {
-        return `Es completamente válido sentirse así. Tómate un respiro si puedes, ${userName}. Estoy aquí contigo.`;
-      }
-
-      if (lower.includes("bien") || lower.includes("tirando") || lower.includes("tranquilo") || lower.includes("no me quejo")) {
-        return `Me alegra que te sientas así, ${userName}. ¿Qué te ha ayudado a sentirte así hoy?`;
-      }
-
-      if (lower.includes("solo") || lower.includes("sola")) {
-        return `Gracias por compartirlo, ${userName}. Aquí no estás solo. ¿Quieres hablar más sobre eso?`;
-      }
-
-      return `Gracias por compartirlo, ${userName}. ¿Quieres seguir contándome cómo te sientes?`;
+    function addMessage(sender, text) {
+      const message = document.createElement('div');
+      message.classList.add('message', sender);
+      message.textContent = text;
+      chat.appendChild(message);
+      chat.scrollTop = chat.scrollHeight;
     }
 
     form.addEventListener('submit', e => {
       e.preventDefault();
-      const input = userInput.value.trim();
-      if (!input) return;
+      const userText = userInput.value.trim();
+      if (!userText) return;
+      addMessage('user', userText);
 
-      addMessage(input, 'user');
-      const response = getResponse(input);
-      setTimeout(() => addMessage(response, 'dane'), 500);
+      fetch('https://e8a45e79-07f9-4fcb-a2f6-4cec1134c330-00-1dvokirgtjthj.spock.replit.dev/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ message: userText })
+      })
+        .then(res => res.json())
+        .then(data => {
+          addMessage('bot', data.reply);
+        })
+        .catch(err => {
+          addMessage('bot', 'Lo siento, ocurrió un error al hablar con Dane. Inténtalo más tarde.');
+        });
+
       userInput.value = '';
     });
   </script>
 </body>
 </html>
-
