@@ -5,36 +5,40 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Dane</title>
   <style>
-   html, body {
-  margin: 0;
-  padding: 0;
-  height: 100vh;
-  font-family: 'Arial', sans-serif;
-  background: url('danechat.jpg') no-repeat center center fixed;
-  background-size: cover;
-  overflow: hidden;
-}
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Arial', sans-serif;
+      background: url('danechat.jpg') no-repeat center center fixed;
+      background-size: cover;
+    }
 
-#chat-container {
-  height: 100vh;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: 20px;
-  padding-bottom: 100px; /* espacio extra para la caja de entrada */
-  box-sizing: border-box;
-}
+    body {
+      display: flex;
+      flex-direction: column;
+    }
 
-  
+    #chat-container {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 20px;
+      padding-bottom: 100px;
+      box-sizing: border-box;
+    }
+
     .message {
       max-width: 80%;
       padding: 10px;
       margin: 8px;
       border-radius: 15px;
       line-height: 1.5;
-      font-size: 1.15em;
+      font-size: 1.1em;
       word-wrap: break-word;
+      background-color: rgba(255, 255, 255, 0.7);
     }
 
     .user {
@@ -50,6 +54,7 @@
     #form {
       position: fixed;
       bottom: 0;
+      left: 0;
       width: 100%;
       display: flex;
       background-color: rgba(255, 255, 255, 0.95);
@@ -79,16 +84,19 @@
       padding: 0 20px;
       font-style: italic;
       color: #444;
+      margin-bottom: 5px;
     }
   </style>
 </head>
 <body>
   <div id="chat-container"></div>
   <div id="typing"></div>
+
   <form id="form">
     <input id="user-input" type="text" placeholder="Escribe algo..." autocomplete="off" />
     <button type="submit" id="send-btn">Enviar</button>
   </form>
+
   <script>
     const chatContainer = document.getElementById('chat-container');
     const form = document.getElementById('form');
@@ -131,13 +139,13 @@
       addMessage(reply, 'dane');
     });
 
-    // Primer mensaje automático con pausa y "..."
+    // Mensaje inicial automático con "..." y retardo
     window.onload = async () => {
       typingIndicator.textContent = '...';
       await new Promise(resolve => setTimeout(resolve, 2000));
       typingIndicator.textContent = '';
       addMessage('Hola!! Mi nombre es Dane, me gustaría ser tu amigo virtual y me encantaría que pudiésemos conocernos mejor.', 'dane');
-      await new Promise(resolve => setTimeout(resolve, 2500));
+      await new Promise(resolve => setTimeout(resolve, 3000));
       typingIndicator.textContent = '...';
       await new Promise(resolve => setTimeout(resolve, 2000));
       typingIndicator.textContent = '';
