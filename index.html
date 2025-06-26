@@ -10,6 +10,7 @@
       padding: 0;
       font-family: sans-serif;
       height: 100%;
+      font-size: 17px; /* Aumentamos ligeramente el tamaño base de fuente */
     }
     body {
       background: url('danechat.jpg') no-repeat center center fixed;
@@ -41,6 +42,7 @@
       border-radius: 20px;
       clear: both;
       white-space: pre-line;
+      font-size: 17px; /* Ajustamos el tamaño dentro de los mensajes */
     }
     .dane {
       background-color: #e6d3b3;
@@ -61,6 +63,7 @@
       padding: 10px;
       border-radius: 10px;
       border: 1px solid #ccc;
+      font-size: 17px; /* Evita el zoom y mejora legibilidad */
     }
     button {
       margin-left: 10px;
@@ -69,6 +72,7 @@
       background-color: #a2bfc5;
       color: white;
       border-radius: 10px;
+      font-size: 17px;
     }
   </style>
 </head>
@@ -115,6 +119,13 @@
       if (awaitingName) {
         userName = userText.trim().replace(/me llamo|soy|mi nombre es/gi, '').trim();
         awaitingName = false;
+        setTimeout(() => {
+          showTypingIndicator();
+          setTimeout(() => {
+            removeTypingIndicator();
+            addMessage(`Dime, ¿hay algo que te gustaría compartir conmigo hoy? Por ejemplo, ¿cómo estás?`, 'dane');
+          }, 2000);
+        }, 1000);
         return `Es un verdadero placer conocerte, ${userName} 😊`;
       }
 
