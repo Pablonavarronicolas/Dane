@@ -3,181 +3,163 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dane - Tu compañero emocional</title>
+  <title>Dane - Tu amigo virtual</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
     body {
       margin: 0;
       padding: 0;
-      font-family: "Segoe UI", sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background-image: url('danechat.jpg');
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
+      height: 100vh;
       display: flex;
       flex-direction: column;
-      height: 100vh;
     }
 
     .chat-container {
       flex: 1;
-      overflow-y: auto;
-      padding: 20px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      backdrop-filter: blur(6px);
+      justify-content: flex-end;
+      padding: 20px;
+      overflow-y: auto;
     }
 
     .message {
       max-width: 70%;
+      margin-bottom: 10px;
       padding: 10px 15px;
       border-radius: 15px;
-      font-size: 16px;
       line-height: 1.4;
       white-space: pre-wrap;
     }
 
-    .user {
-      align-self: flex-end;
-      background-color: #b9d3e0;
-      color: #000;
-      border-bottom-right-radius: 0;
-    }
-
     .bot {
       align-self: flex-start;
-      background-color: #f2e6d9;
+      background-color: #e9d8b4; /* beige claro */
+      color: #333;
+    }
+
+    .user {
+      align-self: flex-end;
+      background-color: #c6d6e3; /* azul claro */
       color: #000;
-      border-bottom-left-radius: 0;
     }
 
     form {
       display: flex;
       padding: 10px;
-      background: rgba(255, 255, 255, 0.8);
-      backdrop-filter: blur(6px);
-      border-top: 1px solid #ccc;
-      position: sticky;
-      bottom: 0;
+      background-color: rgba(255, 255, 255, 0.7);
     }
 
-    input {
+    input[type="text"] {
       flex: 1;
       padding: 10px;
       font-size: 16px;
       border: none;
-      border-radius: 10px;
-      outline: none;
+      border-radius: 20px;
     }
 
     button {
-      padding: 10px 15px;
+      padding: 10px 20px;
       margin-left: 10px;
       font-size: 16px;
-      border: none;
-      background-color: #6c9db4;
+      background-color: #8c7b75;
       color: white;
-      border-radius: 10px;
+      border: none;
+      border-radius: 20px;
       cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #5a89a1;
     }
   </style>
 </head>
 <body>
   <div class="chat-container" id="chat"></div>
-
-  <form id="chat-form">
-    <input type="text" id="user-input" placeholder="Escribe aquí..." autocomplete="off" />
+  <form id="form">
+    <input type="text" id="user-input" placeholder="Escribe algo..." autocomplete="off" />
     <button type="submit">Enviar</button>
   </form>
 
   <script>
-    const form = document.getElementById('chat-form');
-    const userInput = document.getElementById('user-input');
     const chat = document.getElementById('chat');
-
-    let userName = '';
-    let esperandoNombre = true;
-    let conversacionIniciada = false;
+    const form = document.getElementById('form');
+    const userInput = document.getElementById('user-input');
+    let userName = null;
 
     function addMessage(sender, text) {
-      const message = document.createElement('div');
-      message.classList.add('message', sender);
-      message.textContent = text;
-      chat.appendChild(message);
+      const messageDiv = document.createElement('div');
+      messageDiv.classList.add('message', sender);
+      messageDiv.textContent = text;
+      chat.appendChild(messageDiv);
       chat.scrollTop = chat.scrollHeight;
     }
 
-    function extraerNombre(texto) {
-      const patrones = [
-        /me llamo (\w+)/i,
-        /soy (\w+)/i,
-        /mi nombre es (\w+)/i,
-        /^(\w+)$/i
-      ];
-      for (const patron of patrones) {
-        const match = texto.match(patron);
-        if (match) return match[1];
-      }
-      return null;
+    function addTypingIndicator() {
+      const typingDiv = document.createElement('div');
+      typingDiv.classList.add('message', 'bot');
+      typingDiv.textContent = 'Dane está escribiendo...';
+      typingDiv.id = 'typing';
+      chat.appendChild(typingDiv);
+      chat.scrollTop = chat.scrollHeight;
     }
 
-    form.addEventListener('submit', e => {
-      e.preventDefault();
-      const userText = userInput.value.trim();
-      if (!userText) return;
+    function removeTypingIndicator() {
+      const typingDiv = document.getElementById('typing');
+      if (typingDiv) typingDiv.remove();
+    }
 
-      addMessage('user', userText);
+    async function getBotReply(message) {
+      const response = await fetch('https://<TU-URL-DE-REPLIT>.replit.dev/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message })
+      });
+      const data = await response.json();
+      return data.reply;
+    }
+
+    function getDelay(text) {
+      const length = text.length;
+      if (length < 60) return 2000;
+      if (length < 150) return 4000;
+      return 6000;
+    }
+
+    async function handleBotReply(replyText) {
+      const parts = replyText.split(/(?<=[.?!])\s+(?=[A-ZÁÉÍÓÚ])/);
+
+      for (let part of parts) {
+        addTypingIndicator();
+        const delay = getDelay(part);
+        await new Promise(resolve => setTimeout(resolve, delay));
+        removeTypingIndicator();
+        addMessage('bot', part.trim());
+      }
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const text = userInput.value.trim();
+      if (!text) return;
+      addMessage('user', text);
       userInput.value = '';
 
-      if (esperandoNombre) {
-        const posibleNombre = extraerNombre(userText);
-        if (posibleNombre) {
-          userName = posibleNombre.charAt(0).toUpperCase() + posibleNombre.slice(1).toLowerCase();
-          esperandoNombre = false;
-
-          addMessage('bot', `Es un verdadero placer conocerte, ${userName} 🙂`);
-          setTimeout(() => {
-            addMessage('bot', `Dime, ¿hay algo que te gustaría compartir conmigo hoy? Por ejemplo, ¿cómo estás?`);
-            conversacionIniciada = true;
-          }, 1200);
-        } else {
-          addMessage('bot', "Perdón, no entendí bien tu nombre. ¿Podrías decírmelo otra vez?");
-        }
+      if (!userName) {
+        userName = text.split(' ').slice(-1)[0];
+        await handleBotReply(`Es un verdadero placer conocerte, ${userName} 🙂`);
+        await handleBotReply(`Dime, ¿hay algo que te gustaría compartir conmigo hoy? Por ejemplo, ¿cómo estás?`);
         return;
       }
 
-      if (conversacionIniciada) {
-        fetch('https://e8a45e79-07f9-4fcb-a2f6-4cec1134c330-00-1dvokirgtjthj.spock.replit.dev/chat', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ message: userText })
-        })
-          .then(res => res.json())
-          .then(data => {
-            addMessage('bot', data.reply);
-          })
-          .catch(err => {
-            addMessage('bot', 'Lo siento, ocurrió un error al hablar conmigo. Inténtalo más tarde.');
-          });
-      }
+      const botReply = await getBotReply(text);
+      await handleBotReply(botReply);
     });
 
-    // Presentación inicial automática
-    window.addEventListener('DOMContentLoaded', () => {
-      addMessage('bot', "Hola!! Mi nombre es Dane, me gustaría ser tu amigo virtual y me encantaría que pudiésemos conocernos mejor.");
-      setTimeout(() => {
-        addMessage('bot', "¿Cómo te llamas?");
-      }, 1600);
+    // Inicio automático de Dane
+    window.addEventListener('DOMContentLoaded', async () => {
+      await handleBotReply('Hola!! Mi nombre es Dane, me gustaría ser tu amigo virtual y me encantaría que pudiésemos conocernos mejor.');
+      await handleBotReply('¿Cómo te llamas?');
     });
   </script>
 </body>
