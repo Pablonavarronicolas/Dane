@@ -98,72 +98,82 @@
   </form>
 
   <script>
-    let userName = "";
+    <script>
+  let userName = "";
+  let nameAsked = false;
 
-    function extractName(text) {
-      const nameMatch = text.match(/me llamo (\w+)|soy (\w+)/i);
-      if (nameMatch) {
-        return nameMatch[1] || nameMatch[2];
-      }
-      return null;
+  function extractName(text) {
+    const nameMatch = text.match(/me llamo ([a-záéíóúñ]+)|soy ([a-záéíóúñ]+)/i);
+    if (nameMatch) {
+      return (nameMatch[1] || nameMatch[2]).trim();
+    }
+    return null;
+  }
+
+  function getResponse(userText) {
+    const lowerText = userText.toLowerCase();
+
+    // Si aún no hemos preguntado el nombre
+    if (!nameAsked) {
+      nameAsked = true;
+      return "¿Cómo te llamas? Puedes decirme, por ejemplo, 'Me llamo Ana' o 'Soy Carlos'.";
     }
 
-    function getResponse(userText) {
-      const lowerText = userText.toLowerCase();
-
-      if (!userName) {
-        const name = extractName(userText);
-        if (name) {
-          userName = name.charAt(0).toUpperCase() + name.slice(1);
-          return `Encantado de conocerte, ${userName}. ¿Cómo te estás sintiendo hoy?`;
-        } else {
-          return "¿Cómo te llamas? Puedes decirme 'Me llamo...' o 'Soy...'";
-        }
+    // Si no tenemos nombre todavía
+    if (!userName) {
+      const name = extractName(userText);
+      if (name) {
+        userName = name.charAt(0).toUpperCase() + name.slice(1);
+        return `Encantado de conocerte, ${userName}. ¿Cómo te estás sintiendo hoy?`;
+      } else {
+        return "No estoy seguro de haber entendido tu nombre. ¿Puedes decirlo de nuevo?";
       }
-
-      if (lowerText.includes("triste") || lowerText.includes("deprimido")) {
-        return `Lamento que te sientas así, ${userName}. Estoy aquí para ti, cuéntame si quieres.`;
-      }
-
-      if (lowerText.includes("ansioso") || lowerText.includes("nervioso")) {
-        return `La ansiedad puede ser muy abrumadora, ${userName}. Respira conmigo. ¿Qué la está causando hoy?`;
-      }
-
-      if (lowerText.includes("cansado") || lowerText.includes("agotado")) {
-        return `Parece que estás llevando un gran peso, ${userName}. Es completamente válido necesitar una pausa.`;
-      }
-
-      if (lowerText.includes("vacío") || lowerText.includes("bloqueado")) {
-        return `A veces sentimos un vacío sin nombre, ${userName}. Estoy contigo para ponerle palabras si lo necesitas.`;
-      }
-
-      return `Gracias por compartir esto conmigo, ${userName}. ¿Quieres seguir hablando?`;
     }
 
-    const form = document.getElementById('chat-form');
-    const userInput = document.getElementById('user-input');
-    const chatContainer = document.getElementById('chat-container');
+    // A partir de aquí ya tenemos nombre
+    if (lowerText.includes("triste") || lowerText.includes("deprimido")) {
+      return `Lamento que te sientas así, ${userName}. Estoy aquí para ti, cuéntame si quieres.`;
+    }
 
-    form.addEventListener('submit', e => {
-      e.preventDefault();
-      const userText = userInput.value.trim();
-      if (!userText) return;
+    if (lowerText.includes("ansioso") || lowerText.includes("nervioso")) {
+      return `La ansiedad puede ser muy abrumadora, ${userName}. Respira conmigo. ¿Qué la está causando hoy?`;
+    }
 
-      const userBubble = document.createElement('div');
-      userBubble.className = 'message user-message';
-      userBubble.textContent = userText;
-      chatContainer.appendChild(userBubble);
+    if (lowerText.includes("cansado") || lowerText.includes("agotado")) {
+      return `Parece que estás llevando un gran peso, ${userName}. Es completamente válido necesitar una pausa.`;
+    }
 
-      const responseText = getResponse(userText);
+    if (lowerText.includes("vacío") || lowerText.includes("bloqueado")) {
+      return `A veces sentimos un vacío sin nombre, ${userName}. Estoy contigo para ponerle palabras si lo necesitas.`;
+    }
 
-      const botBubble = document.createElement('div');
-      botBubble.className = 'message bot-message';
-      botBubble.textContent = responseText;
-      chatContainer.appendChild(botBubble);
+    return `Gracias por compartir esto conmigo, ${userName}. ¿Quieres seguir hablando?`;
+  }
 
-      chatContainer.scrollTop = chatContainer.scrollHeight;
-      userInput.value = '';
-    });
+  const form = document.getElementById('chat-form');
+  const userInput = document.getElementById('user-input');
+  const chatContainer = document.getElementById('chat-container');
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const userText = userInput.value.trim();
+    if (!userText) return;
+
+    const userBubble = document.createElement('div');
+    userBubble.className = 'message user-message';
+    userBubble.textContent = userText;
+    chatContainer.appendChild(userBubble);
+
+    const responseText = getResponse(userText);
+
+    const botBubble = document.createElement('div');
+    botBubble.className = 'message bot-message';
+    botBubble.textContent = responseText;
+    chatContainer.appendChild(botBubble);
+
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+    userInput.value = '';
+  });
   </script>
 </body>
 </html>
