@@ -2,162 +2,174 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Dane</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dane - Chat Amigo</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
+      background-color: #fdf6e3; /* Beige muy claro */
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
       padding: 0;
       display: flex;
-      flex-direction: column;
+      justify-content: center;
+      align-items: center;
       height: 100vh;
+      /* Fondo tipo papel con textura sutil */
+      background-image:
+        repeating-linear-gradient(
+          to bottom,
+          #fdf6e3,
+          #fdf6e3 28px,
+          #e7d9b7 29px,
+          #fdf6e3 30px
+        ),
+        url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+      background-repeat: repeat;
+      background-size: auto, 60px 60px;
     }
 
-    header {
-      background-color: #2f2f2f;
-      color: white;
-      padding: 1rem;
-      text-align: center;
-      font-size: 1.4rem;
+    #chat-container {
+      background: transparent; /* Deja que el fondo del body se vea */
+      width: 400px;
+      max-width: 90vw;
+      height: 600px;
+      display: flex;
+      flex-direction: column;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      padding: 15px;
+      box-sizing: border-box;
+      backdrop-filter: brightness(1.05);
     }
 
-    main {
+    #messages {
       flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding: 1rem;
       overflow-y: auto;
+      padding-right: 10px;
+      margin-bottom: 10px;
+      scroll-behavior: smooth;
     }
 
-    .chat {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    .user-message,
-    .bot-message {
-      max-width: 70%;
-      padding: 0.75rem;
-      border-radius: 1rem;
-      font-size: 1rem;
-      line-height: 1.4;
-    }
-
-    .user-message {
+    .message.user {
+      background-color: #f0e4c9; /* caqui claro */
+      color: #5a4a1b;
       align-self: flex-end;
-      background-color: #d1e7dd;
+      border-radius: 15px 15px 0 15px;
+      padding: 10px 15px;
+      margin: 5px 0;
+      max-width: 70%;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      word-wrap: break-word;
     }
 
-    .bot-message {
+    .message.bot {
+      background-color: #cbbf9c; /* marrón claro */
+      color: #3e2f0b;
       align-self: flex-start;
-      background-color: #fff;
-      border: 1px solid #ccc;
+      border-radius: 15px 15px 15px 0;
+      padding: 10px 15px;
+      margin: 5px 0;
+      max-width: 70%;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      word-wrap: break-word;
     }
 
     form {
       display: flex;
-      padding: 1rem;
       border-top: 1px solid #ccc;
-      background-color: white;
+      padding-top: 10px;
     }
 
     input[type="text"] {
       flex: 1;
-      padding: 0.75rem;
-      font-size: 1rem;
+      padding: 10px;
+      border-radius: 20px;
       border: 1px solid #ccc;
-      border-radius: 0.5rem;
+      font-size: 16px;
+      outline: none;
+      margin-right: 10px;
+      background-color: #fdf6e3;
+      color: #3e2f0b;
+    }
+
+    input[type="text"]::placeholder {
+      color: #a89d7d;
     }
 
     button {
-      padding: 0.75rem 1rem;
-      font-size: 1rem;
-      background-color: #2f2f2f;
-      color: white;
+      background-color: #cbbf9c;
       border: none;
-      margin-left: 0.5rem;
-      border-radius: 0.5rem;
+      border-radius: 20px;
+      padding: 10px 20px;
+      color: #3e2f0b;
+      font-weight: bold;
       cursor: pointer;
+      transition: background-color 0.3s ease;
     }
 
     button:hover {
-      background-color: #444;
+      background-color: #b0a97e;
     }
   </style>
 </head>
 <body>
-  <header>Dane</header>
-  <main>
-    <div class="chat" id="chat"></div>
-  </main>
-  <form id="chat-form">
-    <input type="text" id="user-input" placeholder="Escribe aquí..." autocomplete="off"/>
-    <button type="submit">Enviar</button>
-  </form>
+  <div id="chat-container">
+    <div id="messages"></div>
+    <form id="chat-form">
+      <input type="text" id="user-input" placeholder="Escribe tu mensaje aquí..." autocomplete="off" />
+      <button type="submit">Enviar</button>
+    </form>
+  </div>
 
   <script>
+    const messagesDiv = document.getElementById('messages');
     const form = document.getElementById('chat-form');
     const userInput = document.getElementById('user-input');
-    const chat = document.getElementById('chat');
-    let userName = "";
 
-    function appendMessage(text, sender) {
+    let userName = null;
+    let awaitingName = true;
+
+    function addMessage(text, sender) {
       const messageDiv = document.createElement('div');
-      messageDiv.classList.add(sender === 'user' ? 'user-message' : 'bot-message');
+      messageDiv.classList.add('message', sender);
       messageDiv.textContent = text;
-      chat.appendChild(messageDiv);
-      chat.scrollTop = chat.scrollHeight;
+      messagesDiv.appendChild(messageDiv);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
     }
 
-    function getResponse(text) {
-      text = text.toLowerCase();
+    function getResponse(userText) {
+      userText = userText.toLowerCase();
 
-      if (!userName) {
-        const match = text.match(/(?:me llamo|soy|mi nombre es)\s+([a-záéíóúñ]+)/i);
-        if (match && match[1]) {
-          userName = match[1].charAt(0).toUpperCase() + match[1].slice(1);
-        } else {
-          userName = text.charAt(0).toUpperCase() + text.slice(1);
-        }
-        return `Encantado de conocerte, ${userName}. ¿Cómo te encuentras hoy?`;
+      if (awaitingName) {
+        userName = userText.trim();
+        awaitingName = false;
+        return `Estoy encantado de conocerte, ${userName}. ¿Cómo te sientes hoy?`;
       }
 
-      if (text.includes("triste")) {
+      if(userText.includes("triste") || userText.includes("deprimido")) {
         return `${userName}, siento que te sientas así. Estoy aquí para escucharte, no estás solo.`;
       }
-      if (text.includes("ansioso") || text.includes("ansiedad")) {
-        return `La ansiedad puede ser dura, ${userName}. Respira profundo, ¿quieres contarme qué te preocupa?`;
+      if(userText.includes("ansioso") || userText.includes("nervioso")) {
+        return `${userName}, la ansiedad puede ser dura. Respira profundo, ¿quieres contarme qué te preocupa?`;
       }
-      if (text.includes("cansado") || text.includes("agotado")) {
-        return `Es normal sentirse agotado, ${userName}. Date permiso para descansar un poco, estoy contigo.`;
-      }
-      if (text.includes("vacío") || text.includes("solo")) {
-        return `Ese vacío puede ser difícil, ${userName}, pero no estás solo. Estoy aquí, ¿quieres hablar de ello?`;
+      if(userText.includes("cansado") || userText.includes("agotado")) {
+        return `${userName}, es normal sentirse agotado. Date permiso para descansar un poco, aquí estoy.`;
       }
 
-      return `Gracias por compartir eso, ${userName}. ¿Quieres seguir hablando?`;
+      return `Gracias por compartir conmigo, ${userName}. ¿Quieres seguir hablando?`;
     }
+
+    addMessage("Hola! Soy Dane, y me alegro mucho de que estés aquí. Si me lo permites, me gustaría ser un amigo con el que puedas charlar, sin juicios ni tratos, únicamente escucharte y compartir, para aliviar tus pensamientos. ¿Quieres presentarte?", 'bot');
 
     form.addEventListener('submit', e => {
       e.preventDefault();
-      const text = userInput.value.trim();
-      if (!text) return;
-      appendMessage(text, 'user');
-      const response = getResponse(text);
-      setTimeout(() => {
-        appendMessage(response, 'bot');
-      }, 500);
+      const userText = userInput.value.trim();
+      if (!userText) return;
+      addMessage(userText, 'user');
+      const response = getResponse(userText);
+      addMessage(response, 'bot');
       userInput.value = '';
     });
-
-    // Mensaje de bienvenida automático
-    window.onload = () => {
-      appendMessage("Hola! Soy Dane, y me alegra que estés aquí. ¿Cómo te llamas?", 'bot');
-    };
   </script>
 </body>
 </html>
