@@ -5,26 +5,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Dane</title>
   <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100vh;
-      font-family: 'Arial', sans-serif;
-      background: url('danechat.jpg') no-repeat center center fixed;
-      background-size: cover;
-      overflow: hidden;
-    }
+   html, body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  font-family: 'Arial', sans-serif;
+  background: url('danechat.jpg') no-repeat center center fixed;
+  background-size: cover;
+  overflow: hidden;
+}
 
-    #chat-container {
-      height: calc(100vh - 70px);
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding: 20px;
-      box-sizing: border-box;
-    }
+#chat-container {
+  height: 100vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 20px;
+  padding-bottom: 100px; /* espacio extra para la caja de entrada */
+  box-sizing: border-box;
+}
 
+  
     .message {
       max-width: 80%;
       padding: 10px;
