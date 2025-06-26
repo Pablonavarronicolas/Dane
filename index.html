@@ -5,9 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dane - Tu compañero</title>
   <style>
-    body {
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
       margin: 0;
       padding: 0;
+      height: 100%;
       font-family: 'Segoe UI', sans-serif;
       background: url('danechat.jpg') no-repeat center center fixed;
       background-size: cover;
@@ -15,11 +20,12 @@
 
     .chat-container {
       max-width: 600px;
-      margin: 0 auto;
       height: 100vh;
+      margin: 0 auto;
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
+      background-color: rgba(255, 255, 255, 0.2);
       backdrop-filter: blur(4px);
     }
 
@@ -42,14 +48,16 @@
 
     .user {
       align-self: flex-end;
-      background-color: #cce4f6; /* azul suave */
+      background-color: #cce4f6;
       color: #333;
+      border-bottom-right-radius: 0;
     }
 
     .dane {
       align-self: flex-start;
-      background-color: #f5e6d3; /* beige claro */
+      background-color: #f5e6d3;
       color: #333;
+      border-bottom-left-radius: 0;
     }
 
     form {
@@ -86,7 +94,7 @@
 <body>
   <div class="chat-container">
     <div class="chat-box" id="chatBox">
-      <div class="message dane" id="welcome">Hola! Soy Dane, y me alegro mucho de que estés aquí. ¿Cómo te llamas?</div>
+      <div class="message dane">Hola! Soy Dane, y me alegro mucho de que estés aquí. ¿Cómo te llamas?</div>
     </div>
     <form id="chatForm">
       <input type="text" id="userInput" autocomplete="off" placeholder="Escribe aquí..." />
@@ -110,45 +118,47 @@
     }
 
     function getResponse(text) {
-      text = text.toLowerCase();
+      const lower = text.toLowerCase();
 
       if (!userName) {
-        userName = text.trim();
-        return `Estoy encantado de conocerte, ${userName}. ¿Cómo te estás sintiendo hoy?`;
+        const match = text.match(/(?:me llamo|soy|mi nombre es)\s+([a-záéíóúñ]+)/i);
+        userName = match ? match[1] : text.trim();
+        return `Encantado de conocerte, ${userName}. ¿Cómo te estás sintiendo hoy?`;
       }
 
-      if (text.includes("triste") || text.includes("deprimido")) {
-        return "Siento que te sientas así. Estoy aquí para escucharte, no estás solo.";
+      if (lower.includes("triste") || lower.includes("deprimido")) {
+        return `Siento que te sientas así, ${userName}. Estoy aquí para ti, sin prisa. ¿Quieres contarme más?`;
       }
 
-      if (text.includes("ansioso") || text.includes("nervioso")) {
-        return "La ansiedad puede ser dura. Respira profundo, ¿quieres contarme qué te preocupa?";
+      if (lower.includes("ansioso") || lower.includes("ansiedad") || lower.includes("nervioso")) {
+        return `La ansiedad puede ser dura, ${userName}. Estoy contigo. ¿Qué sientes en este momento?`;
       }
 
-      if (text.includes("cansado") || text.includes("agotado")) {
-        return "Es normal sentirse agotado. Date permiso para descansar un poco, aquí estoy.";
+      if (lower.includes("cansado") || lower.includes("agotado")) {
+        return `Es completamente válido sentirse así. Tómate un respiro si puedes, ${userName}. Estoy aquí contigo.`;
       }
 
-      if (text.includes("bien") || text.includes("tranquilo") || text.includes("tirando") || text.includes("no me quejo")) {
-        return `Me alegra saber que estás así, ${userName}. ¿Te gustaría hablar de algo en particular hoy?`;
+      if (lower.includes("bien") || lower.includes("tirando") || lower.includes("tranquilo") || lower.includes("no me quejo")) {
+        return `Me alegra que te sientas así, ${userName}. ¿Qué te ha ayudado a sentirte así hoy?`;
       }
 
-      return "Gracias por compartir conmigo. ¿Quieres seguir hablando?";
+      if (lower.includes("solo") || lower.includes("sola")) {
+        return `Gracias por compartirlo, ${userName}. Aquí no estás solo. ¿Quieres hablar más sobre eso?`;
+      }
+
+      return `Gracias por compartirlo, ${userName}. ¿Quieres seguir contándome cómo te sientes?`;
     }
 
     form.addEventListener('submit', e => {
       e.preventDefault();
-      const userText = userInput.value.trim();
-      if (!userText) return;
+      const input = userInput.value.trim();
+      if (!input) return;
 
-      addMessage(userText, 'user');
-      const response = getResponse(userText);
-      setTimeout(() => {
-        addMessage(response, 'dane');
-      }, 600);
+      addMessage(input, 'user');
+      const response = getResponse(input);
+      setTimeout(() => addMessage(response, 'dane'), 500);
       userInput.value = '';
     });
   </script>
 </body>
 </html>
-
