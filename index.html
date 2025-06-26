@@ -2,113 +2,55 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Dane - Tu amigo para charlar</title>
+  <title>Dane - Chat Amigo</title>
   <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f5f5f5;
-      color: #333;
-      margin: 0;
-      padding: 0;
-    }
-    .container {
-      max-width: 600px;
-      margin: 40px auto;
-      background: white;
-      padding: 30px 40px;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    h1 {
-      font-weight: 600;
-      font-size: 28px;
-      color: #4a4a4a;
-      margin-bottom: 15px;
-    }
-    p.description {
-      font-style: italic;
-      color: #666;
-      margin-bottom: 30px;
-    }
-    form {
-      display: flex;
-      flex-direction: column;
-    }
-    textarea {
-      resize: vertical;
-      min-height: 80px;
-      padding: 12px;
-      font-size: 16px;
-      border: 1.5px solid #ccc;
-      border-radius: 8px;
-      margin-bottom: 20px;
-      font-family: inherit;
-      color: #333;
-    }
-    button {
-      background-color: #4a90e2;
-      color: white;
-      border: none;
-      padding: 14px;
-      font-size: 17px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-    button:hover {
-      background-color: #357abd;
-    }
-    #response {
-      margin-top: 25px;
-      font-size: 18px;
-      line-height: 1.4;
-      color: #444;
-      white-space: pre-line;
-    }
+    body { font-family: Arial, sans-serif; background: #f4f4f4; padding: 20px; }
+    #chat { background: white; padding: 20px; border-radius: 8px; max-width: 600px; margin: auto; }
+    #response { margin-top: 20px; padding: 10px; background: #e1f5fe; border-radius: 5px; min-height: 40px; }
+    form { margin-top: 20px; }
+    input[type="text"] { width: 80%; padding: 10px; border-radius: 5px; border: 1px solid #ccc; }
+    button { padding: 10px 15px; border-radius: 5px; border: none; background: #0288d1; color: white; cursor: pointer; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Hola, soy Dane</h1>
-    <p class="description">Me alegra que estés aquí. Soy un amigo con quien puedes charlar sin juicios ni prisa, solo escucharte y compartir para aliviar tus pensamientos.</p>
+  <div id="chat">
+    <h2>Hola, soy Dane, tu amigo para charlar.</h2>
+    <div id="response">Escribe algo para comenzar la charla...</div>
 
-    <form id="chatForm">
-      <textarea id="userInput" placeholder="¿Cómo te sientes hoy?" required></textarea>
+    <form id="chat-form">
+      <input type="text" id="user-input" placeholder="Escribe aquí..." autocomplete="off" />
       <button type="submit">Enviar</button>
     </form>
-
-    <div id="response"></div>
   </div>
 
   <script>
-    function getResponse(userText) {
-  userText = userText.toLowerCase();
+    const form = document.getElementById('chat-form');
+    const userInput = document.getElementById('user-input');
+    const responseDiv = document.getElementById('response');
 
-  if(userText.includes("triste") || userText.includes("deprimido")) {
-    return "Siento que te sientas así. Estoy aquí para escucharte, no estás solo.";
-  }
-  if(userText.includes("ansioso") || userText.includes("nervioso")) {
-    return "La ansiedad puede ser dura. Respira profundo, ¿quieres contarme qué te preocupa?";
-  }
-  if(userText.includes("cansado") || userText.includes("agotado")) {
-    return "Es normal sentirse agotado. Date permiso para descansar un poco, aquí estoy.";
-  }
-  
-  // Respuesta por defecto
-  return "Gracias por compartir conmigo. ¿Quieres seguir hablando?";
-}
+    function getResponse(text) {
+      const userText = text.toLowerCase();
 
-// Aquí puedes ver un ejemplo de cómo usarlo:
-console.log(getResponse("Me siento triste hoy"));
+      if(userText.includes("triste") || userText.includes("deprimido")) {
+        return "Siento que te sientas así. Estoy aquí para escucharte, no estás solo.";
+      }
+      if(userText.includes("ansioso") || userText.includes("nervioso")) {
+        return "La ansiedad puede ser dura. Respira profundo, ¿quieres contarme qué te preocupa?";
+      }
+      if(userText.includes("cansado") || userText.includes("agotado")) {
+        return "Es normal sentirse agotado. Date permiso para descansar un poco, aquí estoy.";
+      }
+
+      return "Gracias por compartir conmigo. ¿Quieres seguir hablando?";
+    }
 
     form.addEventListener('submit', e => {
-  e.preventDefault();
-  const userText = userInput.value.trim();
-  if (!userText) return;
-  responseDiv.textContent = 'Dane dice: ' + getResponse(userText);
-  userInput.value = '';
-});
+      e.preventDefault();
+      const text = userInput.value.trim();
+      if(!text) return;
+      responseDiv.textContent = 'Dane dice: ' + getResponse(text);
+      userInput.value = '';
+    });
   </script>
 </body>
 </html>
