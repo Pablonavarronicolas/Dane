@@ -175,6 +175,50 @@
   </form>
 
   <script>
+    // Función para guardar el contexto en sessionStorage
+    function saveContext(context) {
+      sessionStorage.setItem('chatContext', JSON.stringify(context));
+    }
+
+    // Función para obtener el contexto guardado
+    function getContext() {
+      const context = sessionStorage.getItem('chatContext');
+      return context ? JSON.parse(context) : null;
+    }
+
+    // Función para limpiar el contexto (por ejemplo, si el usuario decide empezar de nuevo)
+    function clearContext() {
+      sessionStorage.removeItem('chatContext');
+    }
+
+    window.onload = async () => {
+      const previousContext = getContext();
+      const userName = previousContext ? previousContext.userName : null;
+
+      if (previousContext) {
+        // Si hay contexto previo, saludar al usuario por su nombre
+        const userWantsToContinue = confirm(`Hola ${userName}! ¿Te gustaría continuar desde donde lo dejamos?`);
+
+        if (userWantsToContinue) {
+          // Continuar el chat con el contexto previo
+          addMessage(previousContext.message, 'dane');
+        } else {
+          // Limpiar contexto si el usuario quiere empezar de nuevo
+          clearContext();
+          addMessage('Hola!! Mi nombre es Dane, me gustaría ser tu amigo virtual y me encantaría que pudiésemos conocernos mejor.', 'dane');
+        }
+      } else {
+        // Si no hay contexto previo, comenzar una nueva conversación
+        addMessage('Hola!! Mi nombre es Dane, me gustaría ser tu amigo virtual y me encantaría que pudiésemos conocernos mejor.', 'dane');
+      }
+
+      showTypingIndicator();
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      hideTypingIndicator();
+
+      addMessage('¿Cómo te llamas?', 'dane');
+    };
+
     const chatContainer = document.getElementById('chat-container');
     const form = document.getElementById('form');
     const userInput = document.getElementById('user-input');
@@ -215,28 +259,25 @@
       e.preventDefault();
       const text = userInput.value.trim();
       if (!text) return;
+
+      // Guardar el mensaje del usuario
       addMessage(text, 'user');
       userInput.value = '';
+
+      // Mostrar que Dane está "escribiendo"
       showTypingIndicator();
 
       const reply = await sendMessageToServer(text);
       hideTypingIndicator();
+
+      // Responder con el mensaje de Dane
       addMessage(reply, 'dane');
+
+      // Guardar contexto de la conversación
+      const userName = text.split(' ')[0];  // Suponiendo que el nombre está al inicio del mensaje
+      saveContext({ userName, message: reply });
     });
 
-    // Mensaje inicial automático con "..." y retardo
-    window.onload = async () => {
-      showTypingIndicator();
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      hideTypingIndicator();
-      addMessage('Hola!! Mi nombre es Dane, me gustaría ser tu amigo virtual y me encantaría que pudiésemos conocernos mejor.', 'dane');
-      await new Promise(resolve => setTimeout(resolve, 3000));
-      showTypingIndicator();
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      hideTypingIndicator();
-      addMessage('¿Cómo te llamas?', 'dane');
-    };
   </script>
 </body>
 </html>
-
