@@ -193,11 +193,10 @@
 
     window.onload = async () => {
       const previousContext = getContext();
-      const userName = previousContext ? previousContext.userName : null;
 
       if (previousContext) {
         // Si hay contexto previo, saludar al usuario por su nombre
-        const userWantsToContinue = confirm(`Hola ${userName}! ¿Te gustaría continuar desde donde lo dejamos?`);
+        const userWantsToContinue = confirm(`Hola ${previousContext.userName}! ¿Te gustaría continuar desde donde lo dejamos?`);
 
         if (userWantsToContinue) {
           // Continuar el chat con el contexto previo
