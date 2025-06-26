@@ -2,185 +2,140 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dane - Tu espacio seguro</title>
   <style>
-<style>
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-  }
-
-  header {
-    background-color: #4A5568;
-    color: white;
-    padding: 1rem;
-    text-align: center;
-    font-size: 1.3rem;
-    font-weight: bold;
-  }
-
-  #chat-container {
-    flex: 1;
-    padding: 1rem;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .message {
-    max-width: 80%;
-    padding: 0.8rem 1rem;
-    border-radius: 18px;
-    font-size: 0.95rem;
-    line-height: 1.4;
-    word-wrap: break-word;
-  }
-
-  .user-message {
-    align-self: flex-end;
-    background-color: #3182ce;
-    color: white;
-    border-bottom-right-radius: 0;
-  }
-
-  .bot-message {
-    align-self: flex-start;
-    background-color: #e2e8f0;
-    color: #2d3748;
-    border-bottom-left-radius: 0;
-  }
-
-  form {
-    display: flex;
-    padding: 1rem;
-    background-color: white;
-    border-top: 1px solid #ccc;
-  }
-
-  input[type="text"] {
-    flex: 1;
-    padding: 0.75rem 1rem;
-    border: 1px solid #ccc;
-    border-radius: 20px;
-    font-size: 1rem;
-    outline: none;
-  }
-
-  button {
-    margin-left: 10px;
-    padding: 0 1.5rem;
-    border: none;
-    background-color: #4A5568;
-    color: white;
-    border-radius: 20px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-  }
-
-  button:hover {
-    background-color: #2d3748;
-  }
-</style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+    header {
+      background-color: #555;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+    #chat {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 1rem;
+      overflow-y: auto;
+    }
+    .message {
+      max-width: 80%;
+      padding: 0.75rem 1rem;
+      border-radius: 20px;
+      margin: 0.5rem 0;
+      line-height: 1.4;
+    }
+    .user {
+      background-color: #d1e7dd;
+      align-self: flex-end;
+    }
+    .bot {
+      background-color: #fff;
+      border: 1px solid #ccc;
+      align-self: flex-start;
+    }
+    form {
+      display: flex;
+      padding: 1rem;
+      background-color: #fff;
+      border-top: 1px solid #ccc;
+    }
+    input[type="text"] {
+      flex: 1;
+      padding: 0.5rem;
+      font-size: 1rem;
+      border-radius: 20px;
+      border: 1px solid #ccc;
+    }
+    button {
+      margin-left: 0.5rem;
+      padding: 0.5rem 1rem;
+      background-color: #555;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
-  <header>Dane — Un lugar donde puedes hablar</header>
-
-  <div id="chat-container">
-    <div class="message bot-message">
-      Hola, soy Dane. Me alegra que estés aquí. ¿Cómo te llamas?
-    </div>
-  </div>
-
-  <form id="chat-form">
-    <input type="text" id="user-input" placeholder="Escribe aquí..." autocomplete="off" />
+  <header>
+    <h1>Dane</h1>
+    <p>Tu espacio seguro para hablar</p>
+  </header>
+  <div id="chat"></div>
+  <form id="form">
+    <input type="text" id="userInput" autocomplete="off" placeholder="Escribe aquí..." />
     <button type="submit">Enviar</button>
   </form>
 
   <script>
-    <script>
-  let userName = "";
-  let nameAsked = false;
+    const chat = document.getElementById("chat");
+    const form = document.getElementById("form");
+    const userInput = document.getElementById("userInput");
 
-  function extractName(text) {
-    const nameMatch = text.match(/me llamo ([a-záéíóúñ]+)|soy ([a-záéíóúñ]+)/i);
-    if (nameMatch) {
-      return (nameMatch[1] || nameMatch[2]).trim();
-    }
-    return null;
-  }
+    let userName = "";
 
-  function getResponse(userText) {
-    const lowerText = userText.toLowerCase();
-
-    // Si aún no hemos preguntado el nombre
-    if (!nameAsked) {
-      nameAsked = true;
-      return "¿Cómo te llamas? Puedes decirme, por ejemplo, 'Me llamo Ana' o 'Soy Carlos'.";
+    function addMessage(text, sender) {
+      const msg = document.createElement("div");
+      msg.classList.add("message", sender);
+      msg.textContent = text;
+      chat.appendChild(msg);
+      chat.scrollTop = chat.scrollHeight;
     }
 
-    // Si no tenemos nombre todavía
-    if (!userName) {
-      const name = extractName(userText);
-      if (name) {
-        userName = name.charAt(0).toUpperCase() + name.slice(1);
-        return `Encantado de conocerte, ${userName}. ¿Cómo te estás sintiendo hoy?`;
-      } else {
-        return "No estoy seguro de haber entendido tu nombre. ¿Puedes decirlo de nuevo?";
+    function getResponse(text) {
+      text = text.toLowerCase();
+
+      if (!userName) {
+        userName = text;
+        return `Encantado de conocerte, ${userName}. ¿Cómo te encuentras hoy?`;
       }
+
+      if (text.includes("triste")) {
+        return `${userName}, siento que te sientas así. Estoy aquí para escucharte, no estás solo.`;
+      }
+      if (text.includes("ansioso") || text.includes("ansiedad")) {
+        return `La ansiedad puede ser dura, ${userName}. Respira profundo, ¿quieres contarme qué te preocupa?`;
+      }
+      if (text.includes("cansado") || text.includes("agotado")) {
+        return `Es normal sentirse agotado, ${userName}. Date permiso para descansar un poco, estoy contigo.`;
+      }
+      if (text.includes("vacío") || text.includes("solo")) {
+        return `Ese vacío puede ser difícil, ${userName}, pero no estás solo. Estoy aquí, ¿quieres hablar de ello?`;
+      }
+
+      return `Gracias por compartir eso, ${userName}. ¿Quieres seguir hablando?`;
     }
 
-    // A partir de aquí ya tenemos nombre
-    if (lowerText.includes("triste") || lowerText.includes("deprimido")) {
-      return `Lamento que te sientas así, ${userName}. Estoy aquí para ti, cuéntame si quieres.`;
-    }
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const text = userInput.value.trim();
+      if (!text) return;
 
-    if (lowerText.includes("ansioso") || lowerText.includes("nervioso")) {
-      return `La ansiedad puede ser muy abrumadora, ${userName}. Respira conmigo. ¿Qué la está causando hoy?`;
-    }
+      addMessage(text, "user");
 
-    if (lowerText.includes("cansado") || lowerText.includes("agotado")) {
-      return `Parece que estás llevando un gran peso, ${userName}. Es completamente válido necesitar una pausa.`;
-    }
+      setTimeout(() => {
+        const reply = getResponse(text);
+        addMessage(reply, "bot");
+      }, 600);
 
-    if (lowerText.includes("vacío") || lowerText.includes("bloqueado")) {
-      return `A veces sentimos un vacío sin nombre, ${userName}. Estoy contigo para ponerle palabras si lo necesitas.`;
-    }
+      userInput.value = "";
+    });
 
-    return `Gracias por compartir esto conmigo, ${userName}. ¿Quieres seguir hablando?`;
-  }
-
-  const form = document.getElementById('chat-form');
-  const userInput = document.getElementById('user-input');
-  const chatContainer = document.getElementById('chat-container');
-
-  form.addEventListener('submit', e => {
-    e.preventDefault();
-    const userText = userInput.value.trim();
-    if (!userText) return;
-
-    const userBubble = document.createElement('div');
-    userBubble.className = 'message user-message';
-    userBubble.textContent = userText;
-    chatContainer.appendChild(userBubble);
-
-    const responseText = getResponse(userText);
-
-    const botBubble = document.createElement('div');
-    botBubble.className = 'message bot-message';
-    botBubble.textContent = responseText;
-    chatContainer.appendChild(botBubble);
-
-    chatContainer.scrollTop = chatContainer.scrollHeight;
-    userInput.value = '';
-  });
+    // Mensaje inicial
+    window.onload = () => {
+      addMessage("Hola, soy Dane. ¿Puedo preguntarte tu nombre?", "bot");
+    };
   </script>
 </body>
 </html>
