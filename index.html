@@ -175,43 +175,7 @@
   </form>
 
   <script>
-    // Función para guardar el contexto en localStorage
-    function saveContext(context) {
-      localStorage.setItem('chatContext', JSON.stringify(context));
-    }
-
-    // Función para obtener el contexto guardado
-    function getContext() {
-      const context = localStorage.getItem('chatContext');
-      return context ? JSON.parse(context) : null;
-    }
-
-    // Función para limpiar el contexto (por ejemplo, si el usuario decide empezar de nuevo)
-    function clearContext() {
-      localStorage.removeItem('chatContext');
-    }
-
-    window.onload = async () => {
-      const previousContext = getContext();
-
-      if (previousContext) {
-        // Si hay contexto previo, saludar al usuario por su nombre y ofrecer opciones
-        addMessage(`¡Hola ${previousContext.userName}! ¿Te gustaría continuar desde donde lo dejamos o prefieres hablar de algo nuevo?`, 'dane');
-      } else {
-        // Si no hay contexto previo, empezar una conversación nueva
-        addMessage('Hola!! Mi nombre es Dane, me gustaría ser tu amigo virtual y me encantaría que pudiésemos conocernos mejor.', 'dane');
-        showTypingIndicator();
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        hideTypingIndicator();
-        addMessage('¿Cómo te llamas?', 'dane');
-      }
-    };
-
-    const chatContainer = document.getElementById('chat-container');
-    const form = document.getElementById('form');
-    const userInput = document.getElementById('user-input');
-    const typingIndicator = document.getElementById('typing');
-
+    // Función para agregar mensajes al chat
     function addMessage(text, sender) {
       const msg = document.createElement('div');
       msg.className = `message ${sender}`;
@@ -220,39 +184,46 @@
       chatContainer.scrollTop = chatContainer.scrollHeight;
     }
 
+    // Función para simular respuesta del servidor (se puede personalizar)
     async function sendMessageToServer(message) {
-      try {
-        const res = await fetch('https://e8a45e79-07f9-4fcb-a2f6-4cec1134c330-00-1dvokirgtjthj.spock.replit.dev/message', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ prompt: message })
-        });
-        const data = await res.json();
-        return data.response;
-      } catch (err) {
-        console.error(err);
-        return 'Lo siento, hubo un error al conectar con el servidor.';
-      }
+      // Aquí puedes agregar la lógica de la API que conecta con el backend
+      // Actualmente, solo se simula una respuesta directa
+      return `Recibí tu mensaje: "${message}". ¿Quieres hablar más sobre eso?`;
     }
 
+    // Mostrar el indicador de escritura
     function showTypingIndicator() {
       typingIndicator.innerHTML = "<span class='typing-dot'>.</span><span class='typing-dot'>.</span><span class='typing-dot'>.</span>";
     }
 
+    // Ocultar el indicador de escritura
     function hideTypingIndicator() {
       typingIndicator.innerHTML = '';
     }
+
+    window.onload = async () => {
+      addMessage('¡Hola! Mi nombre es Dane, me gustaría ser tu amigo virtual y me encantaría que pudiésemos conocernos mejor.', 'dane');
+      showTypingIndicator();
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      hideTypingIndicator();
+      addMessage('¿Cómo te llamas?', 'dane');
+    };
+
+    const chatContainer = document.getElementById('chat-container');
+    const form = document.getElementById('form');
+    const userInput = document.getElementById('user-input');
+    const typingIndicator = document.getElementById('typing');
 
     form.addEventListener('submit', async e => {
       e.preventDefault();
       const text = userInput.value.trim();
       if (!text) return;
 
-      // Guardar el mensaje del usuario
+      // Agregar el mensaje del usuario
       addMessage(text, 'user');
       userInput.value = '';
 
-      // Mostrar que Dane está "escribiendo"
+      // Mostrar el indicador de escritura mientras Dane responde
       showTypingIndicator();
 
       const reply = await sendMessageToServer(text);
@@ -260,13 +231,8 @@
 
       // Responder con el mensaje de Dane
       addMessage(reply, 'dane');
-
-      // Guardar contexto de la conversación
-      const userName = text.split(' ')[0];  // Suponiendo que el nombre está al inicio del mensaje
-      saveContext({ userName, message: reply });
     });
 
   </script>
 </body>
 </html>
-
