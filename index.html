@@ -195,7 +195,7 @@
       const previousContext = getContext();
 
       if (previousContext) {
-        // Si hay contexto previo, saludar al usuario por su nombre sin hacer interpretaciones innecesarias
+        // Si hay contexto previo, saludar al usuario por su nombre y ofrecer opciones
         addMessage(`¡Hola ${previousContext.userName}! ¿Te gustaría continuar desde donde lo dejamos o prefieres hablar de algo nuevo?`, 'dane');
       } else {
         // Si no hay contexto previo, empezar una conversación nueva
