@@ -20,7 +20,6 @@
       height: 100%;
     }
 
-    /* Barra superior fija con imagen de perfil, nombre y estado */
     #chat-header {
       display: flex;
       align-items: center;
@@ -56,7 +55,6 @@
       color: #666;
     }
 
-    /* Contenedor del chat que debe ser desplazable */
     #chat-container {
       flex: 1;
       overflow-y: auto;
@@ -64,9 +62,9 @@
       flex-direction: column;
       justify-content: flex-end;
       padding: 20px;
-      padding-top: 80px; /* Espacio para la barra fija */
+      padding-top: 80px;
       box-sizing: border-box;
-      margin-bottom: 60px; /* Espacio para la caja de entrada */
+      margin-bottom: 60px;
     }
 
     .message {
@@ -90,7 +88,6 @@
       background-color: #f5e6ca;
     }
 
-    /* Caja de escritura fija en la parte inferior */
     #form {
       position: fixed;
       bottom: 0;
@@ -133,31 +130,17 @@
       display: inline-block;
     }
 
-    .typing-dot:nth-child(1) {
-      animation-delay: 0s;
-    }
-
-    .typing-dot:nth-child(2) {
-      animation-delay: 0.5s;
-    }
-
-    .typing-dot:nth-child(3) {
-      animation-delay: 1s;
-    }
+    .typing-dot:nth-child(1) { animation-delay: 0s; }
+    .typing-dot:nth-child(2) { animation-delay: 0.5s; }
+    .typing-dot:nth-child(3) { animation-delay: 1s; }
 
     @keyframes blink {
-      0%, 100% {
-        opacity: 0;
-      }
-      50% {
-        opacity: 1;
-      }
+      0%, 100% { opacity: 0; }
+      50% { opacity: 1; }
     }
-
   </style>
 </head>
 <body>
-  <!-- Barra superior con foto de perfil, nombre y estado -->
   <div id="chat-header">
     <img src="Dane..png" alt="Foto de Dane" class="profile-img">
     <div class="user-info">
@@ -175,7 +158,11 @@
   </form>
 
   <script>
-    // Función para agregar mensajes al chat
+    const chatContainer = document.getElementById('chat-container');
+    const form = document.getElementById('form');
+    const userInput = document.getElementById('user-input');
+    const typingIndicator = document.getElementById('typing');
+
     function addMessage(text, sender) {
       const msg = document.createElement('div');
       msg.className = `message ${sender}`;
@@ -184,55 +171,35 @@
       chatContainer.scrollTop = chatContainer.scrollHeight;
     }
 
-    // Función para simular respuesta del servidor (se puede personalizar)
-    async function sendMessageToServer(message) {
-      // Aquí puedes agregar la lógica de la API que conecta con el backend
-      // Actualmente, solo se simula una respuesta directa
-      return `Recibí tu mensaje: "${message}". ¿Quieres hablar más sobre eso?`;
-    }
-
-    // Mostrar el indicador de escritura
     function showTypingIndicator() {
       typingIndicator.innerHTML = "<span class='typing-dot'>.</span><span class='typing-dot'>.</span><span class='typing-dot'>.</span>";
     }
 
-    // Ocultar el indicador de escritura
     function hideTypingIndicator() {
       typingIndicator.innerHTML = '';
     }
 
-    window.onload = async () => {
-      addMessage('¡Hola! Mi nombre es Dane, me gustaría ser tu amigo virtual y me encantaría que pudiésemos conocernos mejor.', 'dane');
+    async function sendMessageToServer(message) {
       showTypingIndicator();
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      hideTypingIndicator();
-      addMessage('¿Cómo te llamas?', 'dane');
-    };
 
-    const chatContainer = document.getElementById('chat-container');
-    const form = document.getElementById('form');
-    const userInput = document.getElementById('user-input');
-    const typingIndicator = document.getElementById('typing');
+      // Aquí se conectará con la API de OpenAI y se insertará el prompt completo de Dane.
+      // Por ahora, esto queda como estructura limpia para implementar.
+
+      // Simulación temporal para pruebas
+      const response = "[Respuesta generada por el modelo con personalidad de Dane]";
+
+      hideTypingIndicator();
+      addMessage(response, 'dane');
+    }
 
     form.addEventListener('submit', async e => {
       e.preventDefault();
       const text = userInput.value.trim();
       if (!text) return;
-
-      // Agregar el mensaje del usuario
       addMessage(text, 'user');
       userInput.value = '';
-
-      // Mostrar el indicador de escritura mientras Dane responde
-      showTypingIndicator();
-
-      const reply = await sendMessageToServer(text);
-      hideTypingIndicator();
-
-      // Responder con el mensaje de Dane
-      addMessage(reply, 'dane');
+      await sendMessageToServer(text);
     });
-
   </script>
 </body>
 </html>
