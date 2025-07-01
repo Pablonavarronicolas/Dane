@@ -197,6 +197,18 @@
       }
     }
 
+    async function typeMessage(text, sender) {
+      const msg = document.createElement('div');
+      msg.className = `message ${sender}`;
+      chatContainer.appendChild(msg);
+
+      for (let i = 0; i < text.length; i++) {
+        msg.textContent += text.charAt(i);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+        await new Promise(resolve => setTimeout(resolve, 50)); // velocidad de escritura: 50ms
+      }
+    }
+
     form.addEventListener('submit', async e => {
       e.preventDefault();
       const text = userInput.value.trim();
@@ -208,7 +220,7 @@
 
       const reply = await sendMessageToServer(text);
       hideTypingIndicator();
-      addMessage(reply, 'dane');
+      await typeMessage(reply, 'dane');
     });
   </script>
 </body>
