@@ -4,150 +4,149 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Dane</title>
- <style>
-  html, body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    font-family: 'Arial', sans-serif;
-    background: url('danechat.jpg') no-repeat center center fixed;
-    background-size: cover;
-  }
-
-  body {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-  }
-
-  #chat-header {
-    display: flex;
-    align-items: center;
-    background-color: #f0f0f0;
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 100;
-  }
-
-  .profile-img {
-    width: 50px; /* Aumentado de 40px a 50px */
-    height: 50px;
-    border-radius: 50%;
-    margin-right: 10px;
-  }
-
-  .user-info {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .user-name {
-    font-weight: bold;
-    font-size: 16px;
-  }
-
-  .status {
-    font-size: 12px;
-    color: #666;
-  }
-
-  #chat-container {
-    flex: 1;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    padding: 20px;
-    padding-top: 80px;
-    box-sizing: border-box;
-    margin-bottom: 60px;
-  }
-
-  .message {
-    max-width: 80%;
-    padding: 10px;
-    margin: 8px;
-    border-radius: 15px;
-    line-height: 1.5;
-    font-size: 1.1em;
-    word-wrap: break-word;
-    background-color: rgba(255, 255, 255, 0.7);
-  }
-
-  .user {
-    align-self: flex-end;
-    background-color: #a0c4ff;
-  }
-
-  .dane {
-    align-self: flex-start;
-    background-color: #f5e6ca;
-  }
-
-  #form {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    display: flex;
-    background-color: rgba(255, 255, 255, 0.95);
-    padding: 10px;
-    box-sizing: border-box;
-    z-index: 100;
-  }
-
-  #user-input {
-    flex: 1;
-    padding: 10px;
-    font-size: 1em;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-  }
-
-  #send-btn {
-    margin-left: 10px;
-    padding: 10px 15px;
-    background-color: #7f5af0;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-  }
-
-  #typing {
-    padding: 0 20px;
-    font-style: italic;
-    color: #444;
-    margin-bottom: 5px;
-  }
-
-  .typing-dot {
-    animation: blink 1.5s infinite;
-    display: inline-block;
-  }
-
-  .typing-dot:nth-child(1) { animation-delay: 0s; }
-  .typing-dot:nth-child(2) { animation-delay: 0.5s; }
-  .typing-dot:nth-child(3) { animation-delay: 1s; }
-
-  @keyframes blink {
-    0%, 100% { opacity: 0; }
-    50% { opacity: 1; }
-  }
-
-  /* Ajuste de tamaño solo en móviles */
-  @media (max-width: 480px) {
-    .profile-img {
-      width: 60px;
-      height: 60px;
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Arial', sans-serif;
+      background: url('danechat.jpg') no-repeat center center fixed;
+      background-size: cover;
     }
-  }
-</style>
 
+    body {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    #chat-header {
+      display: flex;
+      align-items: center;
+      background-color: #f0f0f0;
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 100;
+    }
+
+    .profile-img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+
+    .user-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .user-name {
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .status {
+      font-size: 12px;
+      color: #666;
+    }
+
+    #chat-container {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 20px;
+      padding-top: 80px;
+      box-sizing: border-box;
+      margin-bottom: 60px;
+    }
+
+    .message {
+      max-width: 80%;
+      padding: 10px;
+      margin: 8px;
+      border-radius: 15px;
+      line-height: 1.5;
+      font-size: 1.1em;
+      word-wrap: break-word;
+      background-color: rgba(255, 255, 255, 0.7);
+    }
+
+    .user {
+      align-self: flex-end;
+      background-color: #a0c4ff;
+    }
+
+    .dane {
+      align-self: flex-start;
+      background-color: #f5e6ca;
+    }
+
+    #form {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      display: flex;
+      background-color: rgba(255, 255, 255, 0.95);
+      padding: 10px;
+      box-sizing: border-box;
+      z-index: 100;
+    }
+
+    #user-input {
+      flex: 1;
+      padding: 10px;
+      font-size: 1em;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+    }
+
+    #send-btn {
+      margin-left: 10px;
+      padding: 10px 15px;
+      background-color: #7f5af0;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    #typing {
+      padding: 0 20px;
+      font-style: italic;
+      color: #444;
+      margin-bottom: 5px;
+    }
+
+    .typing-dot {
+      animation: blink 1.5s infinite;
+      display: inline-block;
+    }
+
+    .typing-dot:nth-child(1) { animation-delay: 0s; }
+    .typing-dot:nth-child(2) { animation-delay: 0.5s; }
+    .typing-dot:nth-child(3) { animation-delay: 1s; }
+
+    @keyframes blink {
+      0%, 100% { opacity: 0; }
+      50% { opacity: 1; }
+    }
+
+    /* Aumentar foto de perfil en móviles */
+    @media (max-width: 480px) {
+      .profile-img {
+        width: 60px;
+        height: 60px;
+      }
+    }
+  </style>
 </head>
 <body>
   <div id="chat-header">
@@ -214,7 +213,7 @@
       for (let i = 0; i < text.length; i++) {
         msg.textContent += text.charAt(i);
         chatContainer.scrollTop = chatContainer.scrollHeight;
-        await new Promise(resolve => setTimeout(resolve, 50)); // velocidad de escritura: 50ms
+        await new Promise(resolve => setTimeout(resolve, 50));
       }
     }
 
@@ -231,7 +230,11 @@
       hideTypingIndicator();
       await typeMessage(reply, 'dane');
     });
+
+    // Mensaje inicial automático de Dane
+    window.addEventListener('load', () => {
+      typeMessage("¡Hola! Me llamo Dane, ¿cómo te llamas tú?", 'dane');
+    });
   </script>
 </body>
 </html>
-
