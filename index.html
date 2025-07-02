@@ -189,7 +189,8 @@
 
     async function sendMessageToServer(message) {
       try {
-        const response = await fetch('https://dane-gpt-backend.onrender.com/chat', {
+        const response = await fetch('https://dane-backend.onrender.com/chat', {
+
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
